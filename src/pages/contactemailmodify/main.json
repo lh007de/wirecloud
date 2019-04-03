@@ -1,0 +1,17 @@
+{
+  "component": true,
+  "navigationBarBackgroundColor": "#2d8cf0",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "联系邮箱",
+  "backgroundColor": "#b5b5b5",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "i-button": "../../../static/iview/button/index",
+    "i-input": "../../../static/iview/input/index",
+    "i-cell": "../../../static/iview/cell/index",
+    "i-switch": "../../../static/iview/switch/index",
+    "i-panel": "../../../static/iview/panel/index",
+    "i-radio": "../../../static/iview/radio/index",
+    "i-radio-group": "../../../static/iview/radio-group/index"
+  }
+}

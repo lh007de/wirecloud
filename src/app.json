@@ -1,0 +1,64 @@
+{
+  "pages": ["pages/welcome/main",
+    "pages/index/main",
+    "pages/logs/main",
+    "pages/counter/main",
+    "pages/demo/main",
+    "pages/modify/main",
+    "pages/pointA/main",
+    "pages/pointZ/main",
+    "pages/orderdetail/main",
+    "pages/ordershare/main",
+    "pages/centralnode/main",
+    "pages/branchnode/main",
+    "pages/orderdetailmulti/main",
+    "pages/usercentral/main",
+
+    "pages/categorymodify/main",
+    "pages/comcontactphonemodify/main",
+    "pages/comnamemodify/main",
+    "pages/comqualificationmodify/main",
+    "pages/contactemailmodify/main",
+    "pages/identifycardmodify/main",
+    "pages/pcloginpwdmodify/main",
+    "pages/usernamemodify/main",
+    "pages/phonemodify/main",
+    "pages/newphonemodify/main",
+    "pages/pcloginpwdmodifycommon/main",
+    "pages/forgetpwd/main",
+    "pages/fogetpwdset/main",
+    "pages/ordermanage/main",
+    "pages/ordertocommitdetail/main",
+    "pages/ordertocommitdetailmulti/main",
+    "pages/ordercommiteddetail/main",
+    "pages/register/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "重庆云专线",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/main",
+        "text": "创建订单",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home-active.png"
+      },
+      {
+        "pagePath": "pages/ordermanage/main",
+        "text": "订单管理",
+        "iconPath": "static/tabs/orders.png",
+        "selectedIconPath": "static/tabs/orders-active.png"
+      },
+      {
+        "pagePath": "pages/usercentral/main",
+        "text": "个人中心",
+        "iconPath": "static/tabs/home.png",
+        "selectedIconPath": "static/tabs/home.png"
+      }
+    ]
+  }
+}

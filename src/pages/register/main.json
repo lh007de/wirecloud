@@ -1,0 +1,19 @@
+{
+  "component": true,
+  "navigationBarBackgroundColor": "#2d8cf0",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "快速注册",
+  "backgroundColor": "#f5f5f6",
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "i-button": "../../../static/iview/button/index",
+    "i-input": "../../../static/iview/input/index",
+    "i-cell": "../../../static/iview/cell/index",
+    "i-switch": "../../../static/iview/switch/index",
+    "i-panel": "../../../static/iview/panel/index",
+    "i-radio": "../../../static/iview/radio/index",
+    "i-radio-group": "../../../static/iview/radio-group/index",
+    "i-cell-group": "../../../static/iview/cell-group/index",
+    "i-cell": "../../../static/iview/cell/index"
+  }
+}

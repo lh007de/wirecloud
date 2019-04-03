@@ -1,0 +1,22 @@
+{
+  "component": true,
+  "navigationBarBackgroundColor": "#2d8cf0",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "订单管理",
+  "backgroundColor": "#f5f5f6",
+  "backgroundTextStyle": "dark",
+  "usingComponents": {
+    "i-button": "../../../static/iview/button/index",
+    "i-input": "../../../static/iview/input/index",
+    "i-cell": "../../../static/iview/cell/index",
+    "i-switch": "../../../static/iview/switch/index",
+    "i-panel": "../../../static/iview/panel/index",
+    "i-radio": "../../../static/iview/radio/index",
+    "i-radio-group": "../../../static/iview/radio-group/index",
+    "i-cell-group": "../../../static/iview/cell-group/index",
+    "i-tabs": "../../../static/iview/tabs/index",
+    "i-tab": "../../../static/iview/tab/index",
+    "i-card": "../../../static/iview/card/index",
+    "i-swipeout": "../../../static/iview/swipeout/index"
+  }
+}
