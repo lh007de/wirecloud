@@ -139,7 +139,7 @@
         })
         this.painting = {
           width: 375,
-          height: 555,
+          height: 724,
           clear: true,
           views: [
             {
@@ -266,6 +266,170 @@
               color: '#383549',
               textAlign: 'left',
               top: 368,
+              left: 50
+            },
+
+            {
+              type: 'rect',
+              background: '#f5f5f6',
+              top: 396,
+              left: 0,
+              width: 375,
+              height: 140
+            },
+
+            {
+              type: 'text',
+              content: '基础参数',
+              fontSize: this.fontsize_title,
+              color: '#212121',
+              textAlign: 'left',
+              top: 396,
+              left: 150
+            },
+            {
+              type: 'text',
+              content: '业务类型:云专线',
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 416,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务名称:点到点',
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 436,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务ID:' + this.service_id,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 456,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '服务宽带(M):' + this.service_band,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 476,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '携带划分VLAN:' + this.divide_vlan,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 496,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '订单提交时间:' + this.service_end_time,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 516,
+              left: 50
+            },
+
+            {
+              type: 'rect',
+              background: '#f5f5f6',
+              top: 544,
+              left: 0,
+              width: 375,
+              height: 180
+            },
+
+            {
+              type: 'text',
+              content: '全局参数',
+              fontSize: this.fontsize_title,
+              color: '#212121',
+              textAlign: 'left',
+              top: 544,
+              left: 150
+            },
+            {
+              type: 'text',
+              content: '业务联系人姓名:' + this.service_person,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 564,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务联系人电话:' + this.service_phone,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 584,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务联系人邮箱:' + this.service_email,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 604,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '客户经理ID:' + this.client_managerID,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 624,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务预计开通周期:' + this.service_time,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 644,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '是否自动续约:' + this.isRenew,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 664,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '预计业务结束周期:' + this.service_end_time,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 684,
+              left: 50
+            },
+            {
+              type: 'text',
+              content: '业务服务缴费周期:' + this.service_payment_cycle,
+              fontSize: this.fontsize_content,
+              color: '#383549',
+              textAlign: 'left',
+              top: 704,
               left: 50
             }
           ]

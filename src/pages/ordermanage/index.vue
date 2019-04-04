@@ -9,7 +9,7 @@
         <i-tab key="tab3" title="已提交" :count="orderdatacommit.length"></i-tab>
       </i-tabs>
     </div>
-    <div v-if="current==='tab1'">
+    <div v-show="current==='tab1'">
       <div v-for = "(item,index) in orderdatatocommit" :key="index" >
         <div style="padding-top: 15px" >
           <i-swipeout :actions="actions" @change="deleteitemtocommit" i-class="i-class">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div v-if="current==='tab2'">
+    <div v-show="current==='tab2'">
       <div v-for = "(item,index) in orderdatatoedit" :key="index" >
         <div style="padding-top: 15px" >
         <i-swipeout :actions="actions" @change="deleteitemtoedit" i-class="i-class">
@@ -51,7 +51,7 @@
       </div>
       </div>
     </div>
-    <div v-if="current==='tab3'">
+    <div v-show="current==='tab3'">
       <div v-for = "(item,index) in orderdatacommit" :key="index" >
       <div style="padding-top: 15px" >
         <i-swipeout :actions="actions"  @change="deleteitemcommit" i-class="i-class">   <!--@click="deleteitemcommit"-->
@@ -65,8 +65,6 @@
       </div>
     </div>
     </div>
-
-
 
 
     <div></div>
