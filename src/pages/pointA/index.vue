@@ -33,7 +33,12 @@
   </div>
 </template>
 <script>
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters({
+        pointToPoint: 'exportPointToPoint'
+      })},
     data () {
       return {
         region: ['四川省', '成都市', '高新区'],
@@ -46,39 +51,44 @@
     },
     methods: {
       formSubmitA (e) {
-        // console.log('form发生了submit事件，携带数据为：', e)
         // A端数据暂存
-        let tempdata = []
-        tempdata.push({'region': this.region})
-        tempdata.push({'siteaddress': this.siteaddress})
-        tempdata.push({'sitename': this.sitename})
-        tempdata.push({'siteemail': this.siteemail})
-        tempdata.push({'sitephone': this.sitephone})
-        // {
-        //   'region': this.region,
-        //   'siteaddress': this.siteaddress,
-        //   'sitename': this.sitename,
-        //   'siteemail': this.siteemail,
-        //   'sitephone': this.sitephone}
-        mpvue.setStorageSync('storageA', tempdata)
+        console.log(this.pointToPoint)
+        // let tempdata = []
+        // tempdata.push({'region': this.region})
+        // tempdata.push({'siteaddress': this.siteaddress})
+        // tempdata.push({'sitename': this.sitename})
+        // tempdata.push({'siteemail': this.siteemail})
+        // tempdata.push({'sitephone': this.sitephone})
+        // // {
+        // //   'region': this.region,
+        // //   'siteaddress': this.siteaddress,
+        // //   'sitename': this.sitename,
+        // //   'siteemail': this.siteemail,
+        // //   'sitephone': this.sitephone}
+        // mpvue.setStorageSync('storageA', tempdata)
         //  前往Z端页面
         const url = '../../pages/pointZ/main'
         mpvue.navigateTo({url})
       },
       bindRegionChange (e) {
         this.region = e.mp.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_region', this.region)
       },
       siteaddressChange (e) {
         this.siteaddress = e.mp.detail.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_DetailAddress', this.siteaddress)
       },
       sitenameChange (e) {
         this.sitename = e.mp.detail.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_ContactName', this.sitename)
       },
       siteemailChange (e) {
         this.siteemail = e.mp.detail.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_ContactEmail', this.siteemail)
       },
       sitephoneChange (e) {
         this.sitephone = e.mp.detail.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_ContactPhone', this.sitephone)
       }
     }
 

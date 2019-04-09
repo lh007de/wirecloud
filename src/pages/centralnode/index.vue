@@ -19,26 +19,30 @@
 
         </picker>
       </div>
-      <i-input  type="text" name="site_address" :maxlength="100"right title="站点详细地址" placeholder="请输入详细地址" autofocus />
+      <i-input  type="text" name="site_address" :maxlength="100"right title="站点详细地址" placeholder="请输入详细地址"  @change="siteaddressChange" autofocus />
 
       <div>
-        <i-input  type="text" name="site_name" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" autofocus />
-        <i-input  type="email" name="site_email" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" autofocus/>
-        <i-input  type="phone" name="site_phone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" autofocus/>
+        <i-input  type="text" name="site_name" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" @change="sitenameChange"  autofocus />
+        <i-input  type="email" name="site_email" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" @change="siteemailChange" autofocus/>
+        <i-input  type="phone" name="site_phone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" @change="sitephoneChange" autofocus/>
       </div>
 
       <div>
-        <i-input  type="text" name="service_band_center" right title="服务宽带" disabled="true" placeholder="——" autofocus />
-        <i-input  type="text" name="vlan_id_center" right title="VLAN ID" disabled="true" placeholder="——" autofocus />
+        <i-input  type="text" name="service_band_center" right title="服务宽带" disabled="true" placeholder="—" autofocus />
+        <i-input  type="text" name="vlan_id_center" right title="VLAN ID" disabled="true" placeholder="—"  autofocus />
       </div>
 
       <i-button @click="formSubmit" type="primary" shape="circle" style="padding-bottom: 20px">下一步</i-button>
-
     </form>
   </div>
 </template>
 <script>
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters({
+        pointToMultiPoint: 'exportPointToMultiPoint'
+      })},
     data () {
       return {
         region: ['四川省', '成都市', '高新区'],
@@ -47,15 +51,26 @@
     },
     methods: {
       formSubmit (e) {
-        console.log('form发生了submit事件，携带数据为：', e)
-        // A端数据暂存
-        mpvue.setStorageSync('storageA', e.mp.detail.value)
-        //  前往Z端页面
+        console.log('中心节点携带数据为：', this.pointToMultiPoint)
         const url = '../../pages/branchnode/main'
         mpvue.navigateTo({url})
       },
       bindRegionChange (e) {
         this.region = e.mp.detail.value
+        this.$set(this.pointToMultiPoint.centerPoint, 'site_region', this.region)
+      },
+      siteaddressChange (e) {
+        this.$set(this.pointToMultiPoint.centerPoint, 'site_DetailAddress', e.mp.detail.detail.value)
+      },
+      sitenameChange (e) {
+        this.$set(this.pointToMultiPoint.centerPoint, 'site_ContactName', e.mp.detail.detail.value)
+      },
+      siteemailChange (e) {
+        this.siteemail = e.mp.detail.detail.value
+        this.$set(this.pointToMultiPoint.centerPoint, 'site_ContactEmail', e.mp.detail.detail.value)
+      },
+      sitephoneChange (e) {
+        this.$set(this.pointToMultiPoint.centerPoint, 'site_ContactPhone', e.mp.detail.detail.value)
       }
     }
 

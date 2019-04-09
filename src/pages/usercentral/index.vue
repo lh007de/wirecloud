@@ -67,33 +67,8 @@
     },
     mounted () {
       this.userinfo = getApp().globalData.userInfo
-
-      // console.log(this.useinfo)
-      // this.globalData.mydata = {username: ''}
-      // this.username = this.globalData.mydata.username
-      // console.log('使用vuex携带数据', this.userCentral)
     },
     methods: {
-      formSubmitA (e) {
-        // console.log('form发生了submit事件，携带数据为：', e)
-        // A端数据暂存
-        let tempdata = []
-        tempdata.push({'region': this.region})
-        tempdata.push({'siteaddress': this.siteaddress})
-        tempdata.push({'sitename': this.sitename})
-        tempdata.push({'siteemail': this.siteemail})
-        tempdata.push({'sitephone': this.sitephone})
-        // {
-        //   'region': this.region,
-        //   'siteaddress': this.siteaddress,
-        //   'sitename': this.sitename,
-        //   'siteemail': this.siteemail,
-        //   'sitephone': this.sitephone}
-        mpvue.setStorageSync('storageA', tempdata)
-        //  前往Z端页面
-        const url = '../../pages/pointZ/main'
-        mpvue.navigateTo({url})
-      }
     }
 
   }

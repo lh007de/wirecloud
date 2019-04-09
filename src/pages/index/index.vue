@@ -4,13 +4,13 @@
         <label style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family: PingFang;color: #464c5b">业务类型：云专线</label>
 
       <div>
-        <i-input  type="text" name="business_name" :maxlength="10"right title="业务联系人姓名" placeholder="请输入姓名" autofocus />
-        <i-input  type="number" name="business_phone" :maxlength="11" right title="业务联系人电话" placeholder="请输入电话" autofocus/>
-        <i-input  type="email" name="business_name" :maxlength="50"right title="业务联系人邮箱" placeholder="请输入邮箱" autofocus/>
+        <i-input  type="text" :value="globalPara.business_name" :maxlength="10"right title="业务联系人姓名" placeholder="请输入姓名" @change="changeName" autofocus />
+        <i-input  type="number" :value="globalPara.business_phone" :maxlength="11" right title="业务联系人电话" placeholder="请输入电话" @change="changePhone" autofocus/>
+        <i-input  type="email" :value="globalPara.business_email" :maxlength="50"right title="业务联系人邮箱" placeholder="请输入邮箱" @change="changeEmail" autofocus/>
       </div>
 
       <div>
-        <i-input  type="text" name="business_managerID" :maxlength="50"right title="客户经理ID" placeholder="请输入客户经理ID" autofocus/>
+        <i-input  type="text" :value="globalPara.business_managerID" :maxlength="50"right title="客户经理ID" placeholder="请输入客户经理ID" @change="changeManager" autofocus/>
       </div>
       <!--业务开通相关信息-->
       <div>
@@ -22,37 +22,23 @@
           </picker>
         </div>
           <i-cell title="是否自动续费" >
-            <i-switch  :value="isRenew" @change="switch1Change" slot="footer"></i-switch>
+            <i-switch  :value="globalPara.business_IsRenew" @change="switch1Change" slot="footer"></i-switch>
           </i-cell>
         <div>
           <!--是否自动续费-->
           <!--<switch :checked="isRenew" name="switch" @change="switch1Change" />-->
             <i-panel title="业务服务缴费周期">
-              <i-radio-group :current="current_item" @change="handletimeChange">
+              <i-radio-group :current="globalPara.business_PaidCycle" @change="handletimeChange">
                 <i-radio  position="left"  value="按年" style=" width: 50%; display: inline-block;justify-content: center"></i-radio>
                 <i-radio  position="left"  value="按月" style=" width: 50%; display: inline-block;justify-content: center"></i-radio>
               </i-radio-group>
             </i-panel>
-
-            <!--<label>业务服务缴费周期</label>-->
-            <!--<radio-group @change="radioChange">-->
-              <!--<label class="radio">-->
-                <!--<radio value="byYear" checked="true" />-->
-                <!--按年-->
-              <!--</label>-->
-
-              <!--<label class="radio">-->
-                <!--<radio value="byMonth"  />-->
-                <!--按月-->
-              <!--</label>-->
-
-            <!--</radio-group>-->
           </div>
 
           <div>
 
             <i-panel title="业务名称">
-              <i-radio-group :current="current_service" @change="handleServiceChange">
+              <i-radio-group :current="globalPara.business_type" @change="handleServiceChange">
                 <span style=" width: 50%; display: inline-block">
                   <i-radio  position="left"  value="点到点"></i-radio>
                 </span>
@@ -62,27 +48,16 @@
               </i-radio-group>
             </i-panel>
 
-            <!--<p>业务名称</p>-->
-            <!--<radio-group @change="serviceChange">-->
-              <!--<label class="radio">-->
-                <!--<radio value="oneToone" checked="true" />-->
-                <!--点到点-->
-              <!--</label>-->
-              <!--<label class="radio">-->
-                <!--<radio value="oneTomore"  />-->
-                <!--点到多点-->
-              <!--</label>-->
-            <!--</radio-group>-->
 
           <!--点到点选择，点到多点选择-->
-          <div v-if='oneToone'>
-            <i-input  type="num" name="business_band" :maxlength="10" right title="服务宽带(M)" placeholder="请输入" autofocus />
+          <div v-if="globalPara.business_type === '点到点'">
+            <i-input  type="num" :value="globalPara.business_band" :maxlength="10" right title="服务宽带(M)" placeholder="请输入" @change="changeBand" autofocus />
             <i-cell title="携带划分VLAN" >
-              <i-switch  :value="isDivdeBand" @change="divideBandChange" slot="footer"></i-switch>
+              <i-switch  :value="globalPara.business_IsVlan" @change="divideBandChange" slot="footer"></i-switch>
             </i-cell>
 
-            <div v-if="isDivdeBand">
-              <i-input  type="text" name="vlanID" :maxlength="30" right title="VLAN ID" placeholder="请输入" autofocus />
+            <div v-if="globalPara.business_IsVlan">
+              <i-input  type="text" :value="globalPara.business_VlanId" :maxlength="30" right title="VLAN ID" placeholder="请输入" @change="changeVlanID" autofocus />
             </div>
           </div>
 
@@ -95,18 +70,17 @@
 </template>
 <script>
   // import { formatTime } from '@/utils/index'
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters({
+        globalPara: 'exportGlobalPara'
+      })},
     data () {
       return {
         index: 1,
         array: ['1年', '2年'],
-        isRenew: true,
-        oneToone: true,
-        isVlanID: true,
-        currenttime: '',
-        current_item: '按年',
-        current_service: '点到点',
-        isDivdeBand: true
+        currenttime: ''
       }
     },
     mounted () {
@@ -120,19 +94,39 @@
       // this.currenttime = time
     },
     methods: {
+      changeName (e) {
+        this.$set(this.globalPara, 'business_name', e.mp.detail.detail.value)
+      },
+      changePhone (e) {
+        this.$set(this.globalPara, 'business_phone', e.mp.detail.detail.value)
+      },
+      changeEmail (e) {
+        this.$set(this.globalPara, 'business_email', e.mp.detail.detail.value)
+      },
+      changeManager (e) {
+        this.$set(this.globalPara, 'business_managerID', e.mp.detail.detail.value)
+      },
+      changeBand (e) {
+        this.$set(this.globalPara, 'business_band', e.mp.detail.detail.value)
+      },
+      changeVlanID (e) {
+        this.$set(this.globalPara, 'business_VlanId', e.mp.detail.detail.value)
+      },
       formSubmit (e) {
-        console.log('form发生了submit事件，携带数据为：', e)
+        // console.log('form发生了submit事件，携带数据为：', e)
         // 全局参数数据暂存
         //  前往A 或者端页面
+        console.log(this.globalPara)
         let url
-        if (this.oneToone) {
+        if (this.globalPara.business_type === '点到点') {
           url = '../../pages/pointA/main'
         } else { url = '../../pages/centralnode/main' }
         mpvue.navigateTo({url})
       },
       PickerChange (e) {
-        console.log('picker选择改变', e)
+        // console.log('picker选择改变', e)
         this.index = e.mp.detail.value
+        this.$set(this.globalPara, 'business_OpenTime', this.array[this.index])
         const date = new Date()
         const endyear = date.getFullYear() + parseInt(this.index) + 1
         this.currenttime = endyear + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() +
@@ -140,27 +134,16 @@
       },
       switch1Change (e) {
         this.isRenew = e.mp.detail.value
-      },
-      vlanIDswitch1Change (e) {
-        this.isVlanID = e.mp.detail.value
-      },
-      radioChange (e) {
-        console.log('radio选择改变', e)
-      },
-      serviceChange (e) {
-        console.log('服务类型改变', e)
-        this.oneToone = !this.oneToone
-        console.log('服务类型改变', this.oneToone)
+        this.$set(this.globalPara, 'business_IsRenew', this.isRenew)
       },
       handletimeChange (e) {
-        this.current_item = e.mp.detail.value
+        this.$set(this.globalPara, 'business_PaidCycle', e.mp.detail.value)
       },
       handleServiceChange (e) {
-        this.current_service = e.mp.detail.value
-        this.oneToone = !this.oneToone
+        this.$set(this.globalPara, 'business_type', e.mp.detail.value)
       },
       divideBandChange (e) {
-        this.isDivdeBand = e.mp.detail.value
+        this.$set(this.globalPara, 'business_IsVlan', e.mp.detail.value)
       }
 
     }

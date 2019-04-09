@@ -9,19 +9,19 @@
             indicator-active-color="#8A2BE2">
       <swiper-item><i-card title="A端" style="width: 80%">
         <view slot="content">
-          <p>站点地址：{{site_address_A}}</p>
-          <p>站点联系人：{{site_name_A}}</p>
-          <p>站点联系人邮箱：{{site_email_A}}</p>
-          <p>站点联系人电话：{{site_phone_A}}</p>
+          <p>站点地址：{{pointToPoint.pointA.site_DetailAddress}}</p>
+          <p>站点联系人：{{pointToPoint.pointA.site_ContactName}}</p>
+          <p>站点联系人邮箱：{{pointToPoint.pointA.site_ContactEmail}}</p>
+          <p>站点联系人电话：{{pointToPoint.pointA.site_ContactPhone}}</p>
         </view>
         <view slot="footer"></view>
       </i-card></swiper-item>
       <swiper-item><i-card title="Z端" style="width: 80%">
         <view slot="content">
-          <p>站点地址：{{site_address_Z}}</p>
-          <p>站点联系人：{{site_name_Z}}</p>
-          <p>站点联系人邮箱：{{site_email_Z}}</p>
-          <p>站点联系人电话：{{site_phone_Z}}</p>
+          <p>站点地址：{{pointToPoint.pointZ.site_DetailAddress}}</p>
+          <p>站点联系人：{{pointToPoint.pointZ.site_ContactName}}</p>
+          <p>站点联系人邮箱：{{pointToPoint.pointZ.site_ContactEmail}}</p>
+          <p>站点联系人电话：{{pointToPoint.pointZ.site_ContactPhone}}</p>
         </view>
       </i-card></swiper-item>
     </swiper>
@@ -31,9 +31,9 @@
       <view slot="content">
         <p>业务类型：云专线</p>
         <p>业务名称：点到点</p>
-        <p>业务ID：{{service_id}}</p>
-        <p>服务宽带(M)：{{service_band}}</p>
-        <p>携带划分VLAN：{{divide_vlan}}</p>
+        <p>订单ID：{{order_id}}</p>
+        <p>服务宽带(M)：{{globalPara.business_band}}</p>
+        <p>携带划分VLAN：{{globalPara.business_IsVlan ? '是': '否'}}</p>
         <p>订单提交时间：{{order_time}}</p>
       </view>
     </i-card></div>
@@ -42,14 +42,14 @@
     <!--全局参数展示-->
     <div style="padding-top: 20px"><i-card title="全局参数" >
       <view slot="content">
-        <p>业务联系人姓名：{{service_person}}</p>
-        <p>业务联系人电话:{{service_phone}}</p>
-        <p>业务联系人邮箱：{{service_email}}</p>
-        <p>客户经理ID：{{client_managerID}}</p>
-        <p>业务预计开通周期：{{service_time}}</p>
-        <p>是否自动续约：{{isRenew}}</p>
+        <p>业务联系人姓名：{{globalPara.business_name}}</p>
+        <p>业务联系人电话:{{globalPara.business_phone}}</p>
+        <p>业务联系人邮箱：{{globalPara.business_email}}</p>
+        <p>客户经理ID：{{globalPara.business_managerID}}</p>
+        <p>业务预计开通周期：{{globalPara.business_OpenTime}}</p>
+        <p>是否自动续约：{{globalPara.business_IsRenew ? '是': '否'}}</p>
         <p>预计业务结束时间：{{service_end_time}}</p>
-        <p>业务服务缴费周期：{{service_payment_cycle}}</p>
+        <p>业务服务缴费周期：{{globalPara.business_PaidCycle}}</p>
       </view>
     </i-card></div>
 
@@ -57,61 +57,32 @@
   </div>
 </template>
 <script>
-  import { formatTime } from '@/utils/index'
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters({
+        pointToPoint: 'exportPointToPoint',
+        globalPara: 'exportGlobalPara'
+      })},
     data () {
       return {
-        storageA: {},
-        storageZ: {},
-        service_id: '1001',
-        service_band: '100',
-        divide_vlan: '是',
-        order_time: formatTime(new Date()),
+        order_id: '—',
+        order_time: '—',
         indicatorDots: true,
         autoplay: false,
         interval: 5000,
         duration: 1000,
-        site_address_A: 'A站点地址',
-        site_name_A: 'A端联系人',
-        site_email_A: 'A端联系人邮箱',
-        site_phone_A: 'A端联系人电话',
-        site_address_Z: 'Z站点地址',
-        site_name_Z: 'Z端联系人',
-        site_email_Z: 'Z端联系人邮箱',
-        site_phone_Z: 'Z端联系人电话',
-        service_person: '张三',
-        service_phone: '15888888888',
-        service_email: '123@dimpt.com',
-        client_managerID: '10011',
-        service_time: '1年',
-        isRenew: '是',
-        service_end_time: formatTime(new Date()),
-        service_payment_cycle: '按年'
-
+        service_end_time: ''
       }
     },
     mounted () {
-      // let storageA = (mpvue.getStorageSync('storageA') || [])
-      // if (storageA) { this.storageA = storageA } else {
-      //   console.log('A端数据读取失败')
-      // },
-
-      // let storageZ = (mpvue.getStorageSync('storageZ') || [])
-      // if (storageZ) { this.storageA = storageZ } else {
-      //   console.log('Z端数据读取失败')
-      // }
-      // console.log(storageA.site_phone)
-      // storageA.site_phone = '88888888888'
-      // mpvue.setStorageSync('storageA', storageA)
-      // console.log(storageA)
+      const date = new Date()
+      const endyear = date.getFullYear() + parseInt(this.globalPara.business_OpenTime)
+      this.service_end_time = endyear + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()
     },
     methods: {
       formSubmitA (e) {
-        console.log('form发生了submit事件，携带数据为：', e)
-        // A端数据暂存
-        //  前往Z端页面
-        // const url = '../../pages/ordershare/main'
-        // mpvue.navigateTo({url})
+        // 提交到后台
       }
     }
 

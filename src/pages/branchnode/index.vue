@@ -7,22 +7,20 @@
     <div v-if="isstart">
       <swiper :indicator-dots="indicatorDots"
               :duration="2000"
-              :current-item-id="currentitem"
-              :autoplay="true"
               @change="onSlideChangeEnd"
-              circular="true"
+              :current="current"
               style=" padding-top: 10px"
               indicator-active-color="#8A2BE2">
-        <div v-for = "(item,index) in swiperdata" :key="index" >
+        <div v-for = "(item,index) in pointToMultiPoint.branchPoint" :key="index" >
           <swiper-item>
             <i-card :title="'分支节点'+(index+1)" style="width: 90%" @click="openmodal" extra="删除">
               <div slot="content">
-                <p>站点联系人：{{item.contactName}}</p>
-                <p>站点联系人邮箱：{{item.contactEmail}}</p>
-                <p>站点联系人电话：{{item.contactPhone}}</p>
-                <p>站点地址：{{item.siteAddress}}</p>
-                <p>宽带：{{item.serviceBand}}</p>
-                <p>VLAN ID：{{item.vlanID}}</p>
+                <p>站点联系人：{{item.site_ContactName}}</p>
+                <p>站点联系人邮箱：{{item.site_ContactEmail}}</p>
+                <p>站点联系人电话：{{item.site_ContactPhone}}</p>
+                <p>站点地址：{{item.site_DetailAddress}}</p>
+                <p>宽带：{{item.site_SerBand}}</p>
+                <p>VLAN ID：{{item.site_VlanId}}</p>
               </div>
             </i-card>
           </swiper-item>
@@ -65,28 +63,22 @@
 </template>
 <script>
   // import { formatTime } from '@/utils/index'
+  import {mapGetters} from 'vuex'
   export default {
+    computed: {
+      ...mapGetters({
+        pointToMultiPoint: 'exportPointToMultiPoint'
+      })},
     data () {
       return {
-        branchname: ['分支节点一设置', '分支节点二设置',
-          '分支节点三设置', '分支节点四设置',
-          '分支节点五设置', '分支节点六设置',
-          '分支节点七设置', '分支节点八设置',
-          '分支节点九设置', '分支节点十设置'
-        ],
         region: ['四川省', '成都市', '高新区'],
         customItem: '全部',
-        // count 用来标记分支节点
-        count: '',
         siteAddress: '',
         contactName: '',
         contactEmail: '',
         contactPhone: '',
         serviceBand: '',
         vlanID: '',
-        // swiperdata_bak: [
-        //   {contactName: '', contactEmail: '', contactPhone: '', siteAddress: '', serviceBand: '', vlanID: '', region: ''}
-        // ],
         swiperdata: [],
         isstart: false,
         current: 0,
@@ -106,49 +98,29 @@
     mounted () {
     },
     methods: {
-      deleteconfirm (e) {
-        const that = this
-        mpvue.showModal({
-          title: '删除',
-          content: '确定删除分支节点？',
-          success: function (res) {
-            if (res.confirm) {
-              let tempdata = that.swiperdata
-              that.swiperdata = []
-              tempdata.splice(that.current, 1) // 删除子节点信息
-              // that.swiperdata = tempdata
-              that.setData(that.swiperdata, tempdata)
-              tempdata = null
-              console.log(that.swiperdata)
-              if (that.swiperdata.length === 0) {
-                that.isstart = false
-              }
-            } else if (res.cancel) {
-            }
-          }
-        })
-      },
       deletebranch (e) {
+        console.log(e)
         if (e.mp.detail.index === 0) {
           this.isdeletevisible = false
         } else {
           const action = this.deleteitem
-          let tempdata = []
-          for (let i of this.swiperdata) {
-            tempdata.push(i)
-          }
           action[1].loading = true
           this.deleteitem = action
+          this.swiperdata = this.pointToMultiPoint.branchPoint
+          let index = this.current
+          this.swiperdata.splice(index, 1)
 
-          tempdata.splice(this.current, 1) // 删除子节点信息
-          // this.$delete(this.swiperdata, this.current)
-          this.swiperdata = tempdata
-          // this.$root.$mp.page.setData(this.swiperdata, tempdata)
-          // this.setData(this.swiperdata, tempdata)
           if (this.swiperdata.length === 0) {
             this.isstart = false
+          } else { // 没有删除完，也要区分是否删除的是最后一张
+            if (this.swiperdata.length === index) {
+              this.current = index - 1
+            } else {
+              this.current = index
+            }
           }
-          console.log(this.swiperdata)
+          this.$set(this.pointToMultiPoint, 'branchPoint', this.swiperdata)
+          console.log('删除子节点后', this.pointToMultiPoint)
           setTimeout(() => {
             action[1].loading = false
             this.isdeletevisible = false
@@ -160,6 +132,7 @@
         this.isdeletevisible = true
       },
       onSlideChangeEnd (e) {
+        console.log('滑动事件触发 index', e.mp.detail.current)
         this.current = e.mp.detail.current
         // console.log(this.current)
       },
@@ -177,18 +150,20 @@
       //  点击继续添加时间逻辑
       //  1.把该页面数据存储 2.相应轮播组件添加分支节点信息 3.页面标题进行更新 4.清空当前输入
       //   console.log(e)
+        if (this.isstart) { this.swiperdata = this.pointToMultiPoint.branchPoint }
+
         let tempdata = {
-          'region': this.region,
-          'siteAddress': this.siteAddress,
-          'contactName': this.contactName,
-          'contactEmail': this.contactEmail,
-          'contactPhone': this.contactPhone,
-          'serviceBand:': this.serviceBand,
-          'vlanID': this.vlanID
+          'site_region': this.region,
+          'site_DetailAddress': this.siteAddress,
+          'site_ContactName': this.contactName,
+          'site_ContactEmail': this.contactEmail,
+          'site_ContactPhone': this.contactPhone,
+          'site_SerBand:': this.serviceBand,
+          'site_VlanId': this.vlanID
         }
         // 这里应该有个检查 任何必要输入为空时 进行处理
         this.swiperdata.push(tempdata)
-        // this.swiperdata.push({'this.current': tempdata})
+        this.$set(this.pointToMultiPoint, 'branchPoint', this.swiperdata)
         this.isstart = true // 首次添加不显示轮播
         // 下次提交之前清空输入框
         this.region = ''
@@ -198,6 +173,7 @@
         this.contactPhone = ''
         this.serviceBand = ''
         this.vlanID = ''
+        console.log(this.pointToMultiPoint)
       },
       nextStep (e) {
         const url = '../../pages/orderdetailmulti/main'
