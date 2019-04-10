@@ -9,7 +9,8 @@ const state = {
     companyCategory: '请输入',
     companyPhone: '请输入',
     companyQualification: '请输入',
-    newUser: true
+    newUser: true,
+    userinfo: null
   },
   globalPara: { // 全局参数
     business_name: '', // 业务联系人姓名
@@ -22,7 +23,11 @@ const state = {
     business_type: '点到点', // 业务类型/名称
     business_band: '', // 服务宽带
     business_IsVlan: true, // 是否划分VLAN
-    business_VlanId: '' // VLAN ID
+    business_VlanId: '', // VLAN ID
+    service_start_time: '', // 订单提交时间
+    service_end_time: '', // 订单预计到期时间
+    orderId: '', // 后台返回的自增序列
+    orderNumber: '' // 后台返回的时间戳样式订单编号
   },
   pointToPoint: { // 点到点
     pointA: { // A端设置

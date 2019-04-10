@@ -113,14 +113,13 @@
           if (this.swiperdata.length === 0) {
             this.isstart = false
           } else { // 没有删除完，也要区分是否删除的是最后一张
-            if (this.swiperdata.length === index) {
+            if (this.swiperdata.length === index) { // 是最后一张，显示上一张
               this.current = index - 1
-            } else {
+            } else { // 不是最后一张，显示下一张
               this.current = index
             }
           }
           this.$set(this.pointToMultiPoint, 'branchPoint', this.swiperdata)
-          console.log('删除子节点后', this.pointToMultiPoint)
           setTimeout(() => {
             action[1].loading = false
             this.isdeletevisible = false
@@ -158,11 +157,12 @@
           'site_ContactName': this.contactName,
           'site_ContactEmail': this.contactEmail,
           'site_ContactPhone': this.contactPhone,
-          'site_SerBand:': this.serviceBand,
+          'site_SerBand': this.serviceBand,
           'site_VlanId': this.vlanID
         }
         // 这里应该有个检查 任何必要输入为空时 进行处理
         this.swiperdata.push(tempdata)
+        console.log('swiperdata数据为', this.swiperdata)
         this.$set(this.pointToMultiPoint, 'branchPoint', this.swiperdata)
         this.isstart = true // 首次添加不显示轮播
         // 下次提交之前清空输入框
@@ -195,6 +195,7 @@
         this.contactPhone = e.mp.detail.detail.value
       },
       serviceBandChange (e) {
+        console.log('带宽改变', e)
         this.serviceBand = e.mp.detail.detail.value
       },
       vlanIDChange (e) {

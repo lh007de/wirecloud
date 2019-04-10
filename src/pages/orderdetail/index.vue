@@ -72,17 +72,108 @@
         autoplay: false,
         interval: 5000,
         duration: 1000,
-        service_end_time: ''
+        service_end_time: '',
+        service_start_time: ''
       }
     },
     mounted () {
       const date = new Date()
+      this.service_start_time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()
       const endyear = date.getFullYear() + parseInt(this.globalPara.business_OpenTime)
       this.service_end_time = endyear + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()
+      this.$set(this.globalPara, 'service_start_time', this.service_start_time)
+      this.$set(this.globalPara, 'service_end_time', this.service_end_time)
     },
     methods: {
       formSubmitA (e) {
         // 提交到后台
+        let that = this
+        wx.request({ // 提交数据
+          url: 'http://10.220.98.168:8080/orders/submit',
+          data: {
+            'bizType': 'p2p',
+            'contact': { // 全局参数
+              'email': this.globalPara.business_email,
+              'mobile': this.globalPara.business_phone,
+              'name': this.globalPara.business_name
+            },
+            'managerId': this.globalPara.business_managerID,
+            'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+            'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+            'renew': this.globalPara.business_IsRenew,
+            'sites': [
+              {
+                'address': {
+                  'address': this.pointToPoint.pointA.site_DetailAddress,
+                  'area': {
+                    'name': this.pointToPoint.pointA.site_region[0] + this.pointToPoint.pointA.site_region[1]
+                  },
+                  'street': {
+                    'name': this.pointToPoint.pointA.site_region[2]
+                  }
+                },
+                'contact': {
+                  'email': this.pointToPoint.pointA.site_ContactEmail,
+                  'mobile': this.pointToPoint.pointA.site_ContactPhone,
+                  'name': this.pointToPoint.pointA.site_ContactName
+                },
+                'master': true // 标志是否A端 或者是中心节点
+              },
+              {
+                'address': {
+                  'address': this.pointToPoint.pointZ.site_DetailAddress,
+                  'area': {
+                    'name': this.pointToPoint.pointZ.site_region[0] + this.pointToPoint.pointZ.site_region[1]
+                  },
+                  'street': {
+                    'name': this.pointToPoint.pointZ.site_region[2]
+                  }
+                },
+                'bandwidth': this.globalPara.business_band,
+                'contact': {
+                  'email': this.pointToPoint.pointZ.site_ContactEmail,
+                  'mobile': this.pointToPoint.pointZ.site_ContactPhone,
+                  'name': this.pointToPoint.pointZ.site_ContactName
+                },
+                'master': false, // 标志是否A端 或者是中心节点
+                'vlanId': this.globalPara.business_IsVlan ? this.globalPara.business_VlanId : ''
+              }
+            ]
+          },
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          method: 'POST',
+          success (res) {
+            console.log(res.data)
+            if (res.data.code === 200) {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none',
+                duration: 1000
+              })
+            } else {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none',
+                duration: 1000
+              })
+            }
+            that.$set(that.globalPara, 'orderId', res.data.data.id)
+            that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
+            setTimeout(function () {
+              const url = '../../pages/ordercommiteddetail/main'
+              mpvue.navigateTo({url})
+            }, 2000)
+          },
+          fail (res) {
+            console.log(res.data)
+          }
+        })
+
+        // wx.switchTab({
+        //   url: '../../pages/index/main'
+        // })
       }
     }
 

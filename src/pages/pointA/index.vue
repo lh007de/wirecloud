@@ -39,6 +39,9 @@
       ...mapGetters({
         pointToPoint: 'exportPointToPoint'
       })},
+    onUnload () {
+      console.log('要离开了，好怀念')
+    },
     data () {
       return {
         region: ['四川省', '成都市', '高新区'],
@@ -68,7 +71,7 @@
         // mpvue.setStorageSync('storageA', tempdata)
         //  前往Z端页面
         const url = '../../pages/pointZ/main'
-        mpvue.navigateTo({url})
+        wx.navigateTo({url})
       },
       bindRegionChange (e) {
         this.region = e.mp.detail.value

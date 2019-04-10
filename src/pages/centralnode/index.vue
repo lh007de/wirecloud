@@ -39,6 +39,9 @@
 <script>
   import {mapGetters} from 'vuex'
   export default {
+    onUnload () {
+      console.log('要离开了，好怀念')
+    },
     computed: {
       ...mapGetters({
         pointToMultiPoint: 'exportPointToMultiPoint'

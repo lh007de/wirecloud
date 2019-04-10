@@ -121,7 +121,7 @@
         if (this.globalPara.business_type === '点到点') {
           url = '../../pages/pointA/main'
         } else { url = '../../pages/centralnode/main' }
-        mpvue.navigateTo({url})
+        wx.navigateTo({url})
       },
       PickerChange (e) {
         // console.log('picker选择改变', e)
