@@ -57,7 +57,9 @@ const state = {
     },
     branchPoint: {
     } // 分支节点动态添加
-  }
+  },
+  dataToEdit: {data: {}}, // 服务器返回的当前详情数据
+  dataCommit: {data: {}} // 已提交数据
 }
 const mutations = {
   setUserCentral (state, userCentral) { // 设置用户信息
@@ -66,18 +68,26 @@ const mutations = {
   setGlobalPara (state, globalPara) { // 全局参数
     state.globalPara = globalPara
   },
-  setPointToPoint (state, pointToPoint) { // 全局参数
+  setPointToPoint (state, pointToPoint) { // 点到点
     state.pointToPoint = pointToPoint
   },
-  setPointToMultiPoint (state, pointToMultiPoint) { // 全局参数
+  setPointToMultiPoint (state, pointToMultiPoint) { // 点到多点
     state.pointToMultiPoint = pointToMultiPoint
+  },
+  setDataToEdit (state, dataToEdit) {
+    state.dataToEdit = dataToEdit
+  },
+  setDataCommit (state, dataCommit) {
+    state.dataCommit = dataCommit
   }
 }
 const getters = {
   exportUserCentral: state => state.userCentral,
   exportGlobalPara: state => state.globalPara,
   exportPointToPoint: state => state.pointToPoint,
-  exportPointToMultiPoint: state => state.pointToMultiPoint
+  exportPointToMultiPoint: state => state.pointToMultiPoint,
+  exportDataToEdit: state => state.dataToEdit,
+  exportDataCommit: state => state.dataCommit
 }
 const actions = {
   setUserCentral ({commit}, userCentral) {
@@ -91,6 +101,12 @@ const actions = {
   },
   setPointToMultiPoint ({commit}, pointToMultiPoint) {
     commit('setPointToMultiPoint', pointToMultiPoint)
+  },
+  setDataToEdit ({commit}, dataToEdit) {
+    commit('setDataToEdit', dataToEdit)
+  },
+  setDataCommit ({commit}, dataCommit) {
+    commit('setDataCommit', dataCommit)
   }
 }
 

@@ -141,7 +141,8 @@
             ]
           },
           header: {
-            'content-type': 'application/json' // 默认值
+            'content-type': 'application/json', // 默认值
+            'user_id': '1'
           },
           method: 'POST',
           success (res) {

@@ -54,7 +54,7 @@
     },
     methods: {
       formSubmit (e) {
-        console.log('中心节点携带数据为：', this.pointToMultiPoint)
+        // console.log('中心节点携带数据为：', this.pointToMultiPoint)
         const url = '../../pages/branchnode/main'
         mpvue.navigateTo({url})
       },

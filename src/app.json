@@ -31,7 +31,8 @@
     "pages/ordertocommitdetail/main",
     "pages/ordertocommitdetailmulti/main",
     "pages/ordercommiteddetail/main",
-    "pages/register/main"
+    "pages/register/main",
+    "pages/ordercommiteddetailmulti/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

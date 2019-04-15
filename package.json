@@ -24,6 +24,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "es6-promise": "^4.2.6",
     "html2canvas": "^1.0.0-alpha.12",
     "iview": "^3.3.3",
     "mpvue": "^2.0.2",

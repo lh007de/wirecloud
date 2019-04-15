@@ -103,6 +103,93 @@
     methods: {
       formSubmitA (e) {
         // 提交数据
+        let that = this
+        let tempArr = [{
+          'address': {
+            'address': this.pointToMultiPoint.centerPoint.site_DetailAddress,
+            'area': {
+              'name': this.pointToMultiPoint.centerPoint.site_region[0] + this.pointToMultiPoint.centerPoint.site_region[1]
+            },
+            'street': {
+              'name': this.pointToMultiPoint.centerPoint.site_region[2]
+            }
+          },
+          'contact': {
+            'email': this.pointToMultiPoint.centerPoint.site_ContactEmail,
+            'mobile': this.pointToMultiPoint.centerPoint.site_ContactPhone,
+            'name': this.pointToMultiPoint.centerPoint.site_ContactName
+          },
+          'master': true // 标志是否A端 或者是中心节点
+        }] // 因为是多个分支节点 这里用循环动态添加分支信息
+        for (let item of this.pointToMultiPoint.branchPoint) {
+          let arr = null
+          arr = {
+            'address': {
+              'address': item.site_DetailAddress,
+              'area': {
+                'name': item.site_region[0] + item.site_region[1]
+              },
+              'street': {
+                'name': item.site_region[2]
+              }
+            },
+            'contact': {
+              'email': item.site_ContactEmail,
+              'mobile': item.site_ContactPhone,
+              'name': item.site_ContactName
+            },
+            'bandwidth': item.site_SerBand,
+            'vlanId': item.site_VlanId,
+            'master': false // 标志是否A端 或者是中心节点
+          }
+          tempArr.push(arr)
+        }
+        wx.request({ // 提交数据
+          url: 'http://10.220.98.168:8080/orders/submit',
+          data: {
+            'bizType': 'p2mp',
+            'contact': { // 全局参数
+              'email': this.globalPara.business_email,
+              'mobile': this.globalPara.business_phone,
+              'name': this.globalPara.business_name
+            },
+            'managerId': this.globalPara.business_managerID,
+            'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+            'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+            'renew': this.globalPara.business_IsRenew,
+            'sites': tempArr
+          },
+          header: {
+            'content-type': 'application/json', // 默认值
+            'user_id': '1'
+          },
+          method: 'POST',
+          success (res) {
+            console.log(res.data)
+            if (res.data.code === 200) {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none',
+                duration: 1000
+              })
+            } else {
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none',
+                duration: 1000
+              })
+            }
+            that.$set(that.globalPara, 'orderId', res.data.data.id)
+            that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
+            setTimeout(function () {
+              const url = '../../pages/ordercommiteddetailmulti/main'
+              mpvue.navigateTo({url})
+            }, 2000)
+          },
+          fail (res) {
+            console.log(res.data)
+          }
+        })
       }
     }
 

@@ -1,15 +1,15 @@
 <template>
   <div class="body">
     <div class="header">
-      <div class="title">云专线点到点</div>
+      <div class="title">{{sendData.bizType==='p2p'?'云专线点到点': '云专线点到多点'}}</div>
       <div class="righttitle" @click='select(itemid)'>查看详情</div>
     </div>
 
     <div class="demo_line"><span></span></div>
 
-    <span class="inline">业务ID: {{sendData.id}}</span>
-    <span class="inline">业务联系人: {{sendData.person}}</span>
-    <span class="inline">联系电话：{{sendData.phone}}</span>
+    <span class="inline">业务ID: {{sendData.orderNumber}}</span>
+    <span class="inline">业务联系人: {{sendData.contact.name}}</span>
+    <span class="inline">联系电话：{{sendData.contact.mobile}}</span>
     <span class="inline">最后编辑时间: {{sendData.time}}</span>
   </div>
 </template>
