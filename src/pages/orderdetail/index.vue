@@ -9,7 +9,7 @@
             indicator-active-color="#8A2BE2">
       <swiper-item><i-card title="A端" style="width: 80%">
         <view slot="content">
-          <p>站点地址：{{pointToPoint.pointA.site_DetailAddress}}</p>
+          <p>站点地址：{{pointToPoint.pointA.site_region.name + pointToPoint.pointA.site_Street.name + pointToPoint.pointA.site_DetailAddress}}</p>
           <p>站点联系人：{{pointToPoint.pointA.site_ContactName}}</p>
           <p>站点联系人邮箱：{{pointToPoint.pointA.site_ContactEmail}}</p>
           <p>站点联系人电话：{{pointToPoint.pointA.site_ContactPhone}}</p>
@@ -18,7 +18,7 @@
       </i-card></swiper-item>
       <swiper-item><i-card title="Z端" style="width: 80%">
         <view slot="content">
-          <p>站点地址：{{pointToPoint.pointZ.site_DetailAddress}}</p>
+          <p>站点地址：{{pointToPoint.pointZ.site_region.name + pointToPoint.pointZ.site_Street.name + pointToPoint.pointZ.site_DetailAddress}}</p>
           <p>站点联系人：{{pointToPoint.pointZ.site_ContactName}}</p>
           <p>站点联系人邮箱：{{pointToPoint.pointZ.site_ContactEmail}}</p>
           <p>站点联系人电话：{{pointToPoint.pointZ.site_ContactPhone}}</p>
@@ -77,6 +77,7 @@
       }
     },
     mounted () {
+      console.log('测试', this.pointToPoint)
       const date = new Date()
       this.service_start_time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()
       const endyear = date.getFullYear() + parseInt(this.globalPara.business_OpenTime)
@@ -88,93 +89,181 @@
       formSubmitA (e) {
         // 提交到后台
         let that = this
-        wx.request({ // 提交数据
-          url: 'http://10.220.98.168:8080/orders/submit',
-          data: {
-            'bizType': 'p2p',
-            'contact': { // 全局参数
-              'email': this.globalPara.business_email,
-              'mobile': this.globalPara.business_phone,
-              'name': this.globalPara.business_name
-            },
-            'managerId': this.globalPara.business_managerID,
-            'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
-            'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
-            'renew': this.globalPara.business_IsRenew,
-            'sites': [
-              {
-                'address': {
-                  'address': this.pointToPoint.pointA.site_DetailAddress,
-                  'area': {
-                    'name': this.pointToPoint.pointA.site_region[0] + this.pointToPoint.pointA.site_region[1]
-                  },
-                  'street': {
-                    'name': this.pointToPoint.pointA.site_region[2]
-                  }
-                },
-                'contact': {
-                  'email': this.pointToPoint.pointA.site_ContactEmail,
-                  'mobile': this.pointToPoint.pointA.site_ContactPhone,
-                  'name': this.pointToPoint.pointA.site_ContactName
-                },
-                'master': true // 标志是否A端 或者是中心节点
+        // 这里区分是创建提交还是草稿提交
+        if (this.globalPara.orderId) {
+          let orderid = this.globalPara.orderId
+          wx.request({ // 提交数据
+            url: 'http://10.220.98.168:8080/orders/' + orderid + '/submit',
+            data: {
+              'bizType': 'p2p',
+              'contact': { // 全局参数
+                'email': this.globalPara.business_email,
+                'mobile': this.globalPara.business_phone,
+                'name': this.globalPara.business_name
               },
-              {
-                'address': {
-                  'address': this.pointToPoint.pointZ.site_DetailAddress,
-                  'area': {
-                    'name': this.pointToPoint.pointZ.site_region[0] + this.pointToPoint.pointZ.site_region[1]
+              'managerId': this.globalPara.business_managerID,
+              'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+              'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+              'renew': this.globalPara.business_IsRenew,
+              'orderNumber': this.globalPara.orderNumber,
+              'id': this.globalPara.orderId,
+              'sites': [
+                {
+                  'address': {
+                    'address': this.pointToPoint.pointA.site_DetailAddress,
+                    'area': {
+                      'name': this.pointToPoint.pointA.site_region[0] + this.pointToPoint.pointA.site_region[1]
+                    },
+                    'street': {
+                      'name': this.pointToPoint.pointA.site_region[2]
+                    }
                   },
-                  'street': {
-                    'name': this.pointToPoint.pointZ.site_region[2]
-                  }
+                  'contact': {
+                    'email': this.pointToPoint.pointA.site_ContactEmail,
+                    'mobile': this.pointToPoint.pointA.site_ContactPhone,
+                    'name': this.pointToPoint.pointA.site_ContactName
+                  },
+                  'master': true // 标志是否A端 或者是中心节点
                 },
-                'bandwidth': this.globalPara.business_band,
-                'contact': {
-                  'email': this.pointToPoint.pointZ.site_ContactEmail,
-                  'mobile': this.pointToPoint.pointZ.site_ContactPhone,
-                  'name': this.pointToPoint.pointZ.site_ContactName
-                },
-                'master': false, // 标志是否A端 或者是中心节点
-                'vlanId': this.globalPara.business_IsVlan ? this.globalPara.business_VlanId : ''
+                {
+                  'address': {
+                    'address': this.pointToPoint.pointZ.site_DetailAddress,
+                    'area': {
+                      'name': this.pointToPoint.pointZ.site_region[0] + this.pointToPoint.pointZ.site_region[1]
+                    },
+                    'street': {
+                      'name': this.pointToPoint.pointZ.site_region[2]
+                    }
+                  },
+                  'bandwidth': this.globalPara.business_band,
+                  'contact': {
+                    'email': this.pointToPoint.pointZ.site_ContactEmail,
+                    'mobile': this.pointToPoint.pointZ.site_ContactPhone,
+                    'name': this.pointToPoint.pointZ.site_ContactName
+                  },
+                  'master': false, // 标志是否A端 或者是中心节点
+                  'vlanId': this.globalPara.business_IsVlan ? this.globalPara.business_VlanId : ''
+                }
+              ]
+            },
+            header: {
+              'content-type': 'application/json', // 默认值
+              'user_id': '1'
+            },
+            method: 'POST',
+            success (res) {
+              console.log(res.data)
+              if (res.data.code === 200) {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              } else {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
               }
-            ]
-          },
-          header: {
-            'content-type': 'application/json', // 默认值
-            'user_id': '1'
-          },
-          method: 'POST',
-          success (res) {
-            console.log(res.data)
-            if (res.data.code === 200) {
-              wx.showToast({
-                title: res.data.message,
-                icon: 'none',
-                duration: 1000
-              })
-            } else {
-              wx.showToast({
-                title: res.data.message,
-                icon: 'none',
-                duration: 1000
-              })
+              setTimeout(function () {
+                const url = '../../pages/ordercommiteddetail/main'
+                mpvue.navigateTo({url})
+              }, 2000)
+            },
+            fail (res) {
+              console.log(res.data)
             }
-            that.$set(that.globalPara, 'orderId', res.data.data.id)
-            that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
-            setTimeout(function () {
-              const url = '../../pages/ordercommiteddetail/main'
-              mpvue.navigateTo({url})
-            }, 2000)
-          },
-          fail (res) {
-            console.log(res.data)
-          }
-        })
-
-        // wx.switchTab({
-        //   url: '../../pages/index/main'
-        // })
+          })
+        } else {
+          wx.request({ // 提交数据
+            url: 'http://10.220.98.168:8080/orders/submit',
+            data: {
+              'bizType': 'p2p',
+              'contact': { // 全局参数
+                'email': this.globalPara.business_email,
+                'mobile': this.globalPara.business_phone,
+                'name': this.globalPara.business_name
+              },
+              'managerId': this.globalPara.business_managerID,
+              'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+              'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+              'renew': this.globalPara.business_IsRenew,
+              'sites': [
+                {
+                  'address': {
+                    'address': this.pointToPoint.pointA.site_DetailAddress,
+                    'area': {
+                      'code': this.pointToPoint.pointA.site_region.code,
+                      'name': this.pointToPoint.pointA.site_region.name
+                    },
+                    'street': {
+                      'code': this.pointToPoint.pointA.site_Street.code,
+                      'name': this.pointToPoint.pointA.site_Street.name
+                    }
+                  },
+                  'contact': {
+                    'email': this.pointToPoint.pointA.site_ContactEmail,
+                    'mobile': this.pointToPoint.pointA.site_ContactPhone,
+                    'name': this.pointToPoint.pointA.site_ContactName
+                  },
+                  'master': true // 标志是否A端 或者是中心节点
+                },
+                {
+                  'address': {
+                    'address': this.pointToPoint.pointZ.site_DetailAddress,
+                    'area': {
+                      'code': this.pointToPoint.pointZ.site_region.code,
+                      'name': this.pointToPoint.pointZ.site_region.name
+                    },
+                    'street': {
+                      'code': this.pointToPoint.pointZ.site_Street.code,
+                      'name': this.pointToPoint.pointZ.site_Street.name
+                    }
+                  },
+                  'bandwidth': this.globalPara.business_band,
+                  'contact': {
+                    'email': this.pointToPoint.pointZ.site_ContactEmail,
+                    'mobile': this.pointToPoint.pointZ.site_ContactPhone,
+                    'name': this.pointToPoint.pointZ.site_ContactName
+                  },
+                  'master': false, // 标志是否A端 或者是中心节点
+                  'vlanId': this.globalPara.business_IsVlan ? this.globalPara.business_VlanId : ''
+                }
+              ]
+            },
+            header: {
+              'content-type': 'application/json', // 默认值
+              'user_id': '1'
+            },
+            method: 'POST',
+            success (res) {
+              console.log(res.data)
+              if (res.data.code === 200) {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              } else {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              }
+              that.$set(that.globalPara, 'orderId', res.data.data.id)
+              that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
+              setTimeout(function () {
+                const url = '../../pages/ordercommiteddetail/main'
+                mpvue.navigateTo({url})
+              }, 2000)
+            },
+            fail (res) {
+              console.log(res.data)
+            }
+          })
+        }
       }
     }
 

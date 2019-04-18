@@ -18,7 +18,7 @@
                 <p>站点联系人：{{item.site_ContactName}}</p>
                 <p>站点联系人邮箱：{{item.site_ContactEmail}}</p>
                 <p>站点联系人电话：{{item.site_ContactPhone}}</p>
-                <p>站点地址：{{item.site_DetailAddress}}</p>
+                <p>站点地址：{{item.site_region.name + item.site_Street.name + item.site_DetailAddress}}</p>
                 <p>宽带：{{item.site_SerBand}}</p>
                 <p>VLAN ID：{{item.site_VlanId}}</p>
               </div>
@@ -28,22 +28,35 @@
       </swiper>
     </div>
     <i-modal title="删除确认" :visible="isdeletevisible" :actions="deleteitem" @iclick="deletebranch">
-      <view>删除后无法恢复哦</view>
+      <view>删除后无法恢复,确定删除?</view>
     </i-modal>
 
-      <div style="display: flex;padding-top: 20px">
-        <div style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点地区</div>
-        <picker
-          mode="region"
-          @change="bindRegionChange"
-          :value="region"
-          :custom-item="customItem"
-          style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
-        >
-          <div>{{region[0]}}-{{region[1]}}-{{region[2]}}</div>
+    <div class="section" style="display: flex; padding-top: 5px">
+      <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点地区</div>
+      <picker
+        mode="selector"
+        @change="bindRegionChange"
+        :value="regionIndex"
+        :range="regionArray"
+        style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
+      >
+        <div>{{regionArray[regionIndex]}}</div>
 
-        </picker>
-      </div>
+      </picker>
+    </div>
+    <div class="section" style="display: flex; padding-top: 5px">
+      <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点街道</div>
+      <picker
+        mode="selector"
+        @change="bindStreetChange"
+        :value="streetIndex"
+        :range="streetArray"
+        style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
+      >
+        <div>{{streetArray[streetIndex]}}</div>
+
+      </picker>
+    </div>
       <i-input type="text" :value="siteAddress" :maxlength="100" right title="站点详细地址"  placeholder="请输入详细地址" @change="siteAddressChange" autofocus/>
 
       <div>
@@ -64,6 +77,7 @@
 <script>
   // import { formatTime } from '@/utils/index'
   import {mapGetters} from 'vuex'
+  import util from '../../utils/index'
   export default {
     computed: {
       ...mapGetters({
@@ -71,8 +85,12 @@
       })},
     data () {
       return {
-        region: ['四川省', '成都市', '高新区'],
-        customItem: '全部',
+        regionIndex: 0,
+        regin: [],
+        regionArray: [],
+        streetIndex: 0,
+        street: [],
+        streetArray: [],
         siteAddress: '',
         contactName: '',
         contactEmail: '',
@@ -95,7 +113,80 @@
         ]
       }
     },
+    onUnload () {
+      this.region = ['四川省', '成都市', '高新区']
+      this.customItem = '全部'
+      this.siteAddress = ''
+      this.contactName = ''
+      this.contactEmail = ''
+      this.contactPhone = ''
+      this.serviceBand = ''
+      this.vlanID = ''
+      this.swiperdata = []
+      this.isstart = false
+      this.current = 0
+      this.isdeletevisible = false
+      this.deleteitem = [
+        {
+          name: '取消'
+        },
+        {
+          name: '删除',
+          color: '#ed3f14',
+          loading: false
+        }
+      ]
+    },
     mounted () {
+      // 如果从草稿中跳转过来的数据，要进行显示
+      if (typeof (this.pointToMultiPoint.branchPoint.length) !== 'undefined') {
+        this.isstart = true
+      }
+      let that = this
+      wx.request({
+        url: 'http://10.220.98.168:8080/districts/500100/children/',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'user_id': '1'
+        },
+        method: 'GET',
+        success (res) {
+          if (res.data.code === 200) {
+            that.regin = res.data.data
+            // that.$set(that.pointToMultiPoint.centerPoint, 'site_region', that.regin[0])
+            that.regin.forEach(function (item) {
+              that.regionArray.push(item.name)
+            })
+          } else {
+            util.progressTips('获取重庆区域失败，请稍后重试')
+          }
+        },
+        fail (res) {
+          console.log(res.data)
+        }
+      })
+      wx.request({ // 初始万州区街道
+        url: 'http://10.220.98.168:8080/districts/500101/children/',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'user_id': '1'
+        },
+        method: 'GET',
+        success (res) {
+          if (res.data.code === 200) {
+            that.street = res.data.data
+            // that.$set(that.pointToMultiPoint.centerPoint, 'site_Street', that.street[0])
+            that.street.forEach(function (item) {
+              that.streetArray.push(item.name)
+            })
+          } else {
+            util.progressTips('获取重庆区域失败，请稍后重试')
+          }
+        },
+        fail (res) {
+          console.log(res.data)
+        }
+      })
     },
     methods: {
       deletebranch (e) {
@@ -135,24 +226,14 @@
         this.current = e.mp.detail.current
         // console.log(this.current)
       },
-      formSubmit (e) {
-        console.log('form发生了submit事件，携带数据为：', e)
-        wx.setNavigationBarTitle({
-          title: '当前页面'
-        })
-        // A端数据暂存
-        //  前往Z端页面
-        // const url = '../../pages/ordershare/main'
-        // mpvue.navigateTo({url})
-      },
       addBranchNode (e) {
       //  点击继续添加时间逻辑
       //  1.把该页面数据存储 2.相应轮播组件添加分支节点信息 3.页面标题进行更新 4.清空当前输入
       //   console.log(e)
         if (this.isstart) { this.swiperdata = this.pointToMultiPoint.branchPoint }
-
         let tempdata = {
-          'site_region': this.region,
+          'site_region': this.regin[this.regionIndex],
+          'site_Street': this.street[this.streetIndex],
           'site_DetailAddress': this.siteAddress,
           'site_ContactName': this.contactName,
           'site_ContactEmail': this.contactEmail,
@@ -183,7 +264,37 @@
         this.siteAddress = e.mp.detail.detail.value
       },
       bindRegionChange (e) {
-        this.region = e.mp.detail.value
+        this.regionIndex = e.mp.detail.value
+        // this.$set(this.pointToMultiPoint.centerPoint, 'site_region', this.regin[this.regionIndex])
+        // 区域改变，重新请求街道
+        let that = this
+        wx.request({ // 初始万州区街道
+          url: 'http://10.220.98.168:8080/districts/' + that.regin[that.regionIndex].code + '/children/',
+          header: {
+            'content-type': 'application/json', // 默认值
+            'user_id': '1'
+          },
+          method: 'GET',
+          success (res) {
+            if (res.data.code === 200) {
+              that.street = []
+              that.streetArray = []
+              that.street = res.data.data
+              that.street.forEach(function (item) {
+                that.streetArray.push(item.name)
+              })
+            } else {
+              util.progressTips('获取街道失败，请稍后重试')
+            }
+          },
+          fail (res) {
+            util.progressTips('获取街道失败，请稍后重试')
+          }
+        })
+      },
+      bindStreetChange (e) {
+        this.streetIndex = e.mp.detail.value
+        // this.$set(this.pointToMultiPoint.centerPoint, 'site_Street', this.street[this.streetIndex])
       },
       contactNameChange (e) {
         this.contactName = e.mp.detail.detail.value

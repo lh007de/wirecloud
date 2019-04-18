@@ -26,19 +26,21 @@ const state = {
     business_VlanId: '', // VLAN ID
     service_start_time: '', // 订单提交时间
     service_end_time: '', // 订单预计到期时间
-    orderId: '', // 后台返回的自增序列
+    orderId: '', // 后台返回的自增序列,用来标识该条记录
     orderNumber: '' // 后台返回的时间戳样式订单编号
   },
   pointToPoint: { // 点到点
     pointA: { // A端设置
-      site_region: ['四川省', '成都市', '高新区'], // 站点地区
+      site_region: {}, // 站点地区
+      site_Street: {}, // 站点街道
       site_DetailAddress: '', // 站点详细地址
       site_ContactName: '', // 站点联系人姓名
       site_ContactEmail: '', // 站点联系人邮箱
       site_ContactPhone: ''// 站点联系人电话
     },
     pointZ: { // Z端设置
-      site_region: ['四川省', '成都市', '高新区'], // 站点地区
+      site_region: {}, // 站点地区
+      site_Street: {}, // 站点街道
       site_DetailAddress: '', // 站点详细地址
       site_ContactName: '', // 站点联系人姓名
       site_ContactEmail: '', // 站点联系人邮箱
@@ -47,7 +49,8 @@ const state = {
   },
   pointToMultiPoint: { // 点到多点
     centerPoint: { // 中心节点
-      site_region: ['四川省', '成都市', '高新区'], // 站点地区
+      site_region: {}, // 站点地区
+      site_Street: {}, // 站点街道
       site_DetailAddress: '', // 站点详细地址
       site_ContactName: '', // 站点联系人姓名
       site_ContactEmail: '', // 站点联系人邮箱

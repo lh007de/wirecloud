@@ -30,7 +30,7 @@
                 indicator-active-color="#8A2BE2">
           <swiper-item><i-card title="A端" style="width: 80%">
             <view slot="content">
-              <p>站点地址：{{pointToPoint.pointA.site_DetailAddress}}</p>
+              <p>站点地址：{{pointToPoint.pointA.site_region.name + pointToPoint.pointA.site_Street.name +pointToPoint.pointA.site_DetailAddress}}</p>
               <p>站点联系人：{{pointToPoint.pointA.site_ContactName}}</p>
               <p>站点联系人邮箱：{{pointToPoint.pointA.site_ContactEmail}}</p>
               <p>站点联系人电话：{{pointToPoint.pointA.site_ContactPhone}}</p>
@@ -39,7 +39,7 @@
           </i-card></swiper-item>
           <swiper-item><i-card title="Z端" style="width: 80%">
             <view slot="content">
-              <p>站点地址：{{pointToPoint.pointZ.site_DetailAddress}}</p>
+              <p>站点地址：{{pointToPoint.pointZ.site_region.name + pointToPoint.pointZ.site_Street.name + pointToPoint.pointZ.site_DetailAddress}}</p>
               <p>站点联系人：{{pointToPoint.pointZ.site_ContactName}}</p>
               <p>站点联系人邮箱：{{pointToPoint.pointZ.site_ContactEmail}}</p>
               <p>站点联系人电话：{{pointToPoint.pointZ.site_ContactPhone}}</p>
@@ -165,7 +165,7 @@
             },
             {
               type: 'text',
-              content: '站点地址:' + this.pointToPoint.pointA.site_DetailAddress,
+              content: '站点地址:' + this.pointToPoint.pointA.site_region.name + this.pointToPoint.pointA.site_Street.name + this.pointToPoint.pointA.site_DetailAddress,
               fontSize: this.fontsize_content,
               color: '#383549',
               textAlign: 'left',
@@ -220,7 +220,7 @@
             },
             {
               type: 'text',
-              content: '站点地址:' + this.pointToPoint.pointZ.site_DetailAddress,
+              content: '站点地址:' + this.pointToPoint.pointZ.site_region.name + this.pointToPoint.pointZ.site_Street.name + this.pointToPoint.pointZ.site_DetailAddress,
               fontSize: this.fontsize_content,
               color: '#383549',
               textAlign: 'left',

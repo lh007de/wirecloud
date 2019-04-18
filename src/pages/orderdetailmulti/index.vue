@@ -15,7 +15,7 @@
               <p>站点联系人：{{item.site_ContactName}}</p>
               <p>站点联系人邮箱：{{item.site_ContactEmail}}</p>
               <p>站点联系人电话：{{item.site_ContactPhone}}</p>
-              <p>站点地址：{{item.site_DetailAddress}}</p>
+              <p>站点地址：{{item.site_region.name + item.site_Street.name + item.site_DetailAddress}}</p>
               <p>宽带：{{item.site_SerBand}}</p>
               <p>VLAN ID：{{item.site_VlanId}}</p>
             </div>
@@ -108,10 +108,12 @@
           'address': {
             'address': this.pointToMultiPoint.centerPoint.site_DetailAddress,
             'area': {
-              'name': this.pointToMultiPoint.centerPoint.site_region[0] + this.pointToMultiPoint.centerPoint.site_region[1]
+              'code': this.pointToMultiPoint.centerPoint.site_region.code,
+              'name': this.pointToMultiPoint.centerPoint.site_region.name
             },
             'street': {
-              'name': this.pointToMultiPoint.centerPoint.site_region[2]
+              'code': this.pointToMultiPoint.centerPoint.site_Street.code,
+              'name': this.pointToMultiPoint.centerPoint.site_Street.name
             }
           },
           'contact': {
@@ -127,10 +129,12 @@
             'address': {
               'address': item.site_DetailAddress,
               'area': {
-                'name': item.site_region[0] + item.site_region[1]
+                'code': item.site_region.code,
+                'name': item.site_region.name
               },
               'street': {
-                'name': item.site_region[2]
+                'code': item.site_Street.code,
+                'name': item.site_Street.name
               }
             },
             'contact': {
@@ -144,52 +148,103 @@
           }
           tempArr.push(arr)
         }
-        wx.request({ // 提交数据
-          url: 'http://10.220.98.168:8080/orders/submit',
-          data: {
-            'bizType': 'p2mp',
-            'contact': { // 全局参数
-              'email': this.globalPara.business_email,
-              'mobile': this.globalPara.business_phone,
-              'name': this.globalPara.business_name
+        // 这里也要区分是新建提交还是草稿提交
+        if (this.globalPara.orderId) {
+          let orderid = this.globalPara.orderId
+          wx.request({ // 提交数据
+            url: 'http://10.220.98.168:8080/orders/' + orderid + '/submit',
+            data: {
+              'bizType': 'p2mp',
+              'contact': { // 全局参数
+                'email': this.globalPara.business_email,
+                'mobile': this.globalPara.business_phone,
+                'name': this.globalPara.business_name
+              },
+              'managerId': this.globalPara.business_managerID,
+              'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+              'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+              'renew': this.globalPara.business_IsRenew,
+              'orderNumber': this.globalPara.orderNumber,
+              'id': this.globalPara.orderId,
+              'sites': tempArr
             },
-            'managerId': this.globalPara.business_managerID,
-            'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
-            'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
-            'renew': this.globalPara.business_IsRenew,
-            'sites': tempArr
-          },
-          header: {
-            'content-type': 'application/json', // 默认值
-            'user_id': '1'
-          },
-          method: 'POST',
-          success (res) {
-            console.log(res.data)
-            if (res.data.code === 200) {
-              wx.showToast({
-                title: res.data.message,
-                icon: 'none',
-                duration: 1000
-              })
-            } else {
-              wx.showToast({
-                title: res.data.message,
-                icon: 'none',
-                duration: 1000
-              })
+            header: {
+              'content-type': 'application/json', // 默认值
+              'user_id': '1'
+            },
+            method: 'POST',
+            success (res) {
+              console.log(res.data)
+              if (res.data.code === 200) {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              } else {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              }
+              setTimeout(function () {
+                const url = '../../pages/ordercommiteddetailmulti/main'
+                mpvue.navigateTo({url})
+              }, 2000)
+            },
+            fail (res) {
+              console.log(res.data)
             }
-            that.$set(that.globalPara, 'orderId', res.data.data.id)
-            that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
-            setTimeout(function () {
-              const url = '../../pages/ordercommiteddetailmulti/main'
-              mpvue.navigateTo({url})
-            }, 2000)
-          },
-          fail (res) {
-            console.log(res.data)
-          }
-        })
+          })
+        } else {
+          wx.request({ // 提交数据
+            url: 'http://10.220.98.168:8080/orders/submit',
+            data: {
+              'bizType': 'p2mp',
+              'contact': { // 全局参数
+                'email': this.globalPara.business_email,
+                'mobile': this.globalPara.business_phone,
+                'name': this.globalPara.business_name
+              },
+              'managerId': this.globalPara.business_managerID,
+              'payMethod': this.globalPara.business_PaidCycle === '按年' ? 'year' : 'month',
+              'period': this.globalPara.business_OpenTime === '2年' ? 'two year' : 'one year',
+              'renew': this.globalPara.business_IsRenew,
+              'sites': tempArr
+            },
+            header: {
+              'content-type': 'application/json', // 默认值
+              'user_id': '1'
+            },
+            method: 'POST',
+            success (res) {
+              console.log(res.data)
+              if (res.data.code === 200) {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              } else {
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 1000
+                })
+              }
+              that.$set(that.globalPara, 'orderId', res.data.data.id)
+              that.$set(that.globalPara, 'orderNumber', res.data.data.orderNumber)
+              setTimeout(function () {
+                const url = '../../pages/ordercommiteddetailmulti/main'
+                mpvue.navigateTo({url})
+              }, 2000)
+            },
+            fail (res) {
+              console.log(res.data)
+            }
+          })
+        }
       }
     }
 

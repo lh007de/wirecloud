@@ -97,7 +97,7 @@
         }
       })
       wx.request({ // 获取订单列表
-        url: 'http://10.220.98.168:8080/orders/my?applyStatus=sumbitted&limit=10&offset=1&order=ASC&sort=openDate&type=maintain',
+        url: 'http://10.220.98.168:8080/orders/my?applyStatus=submitted&limit=10&offset=1&order=ASC&sort=openDate&type=maintain',
         header: {
           'content-type': 'application/json', // 默认值
           'user_id': '1'
@@ -185,10 +185,7 @@
     methods: {
       refertoedit (e) {
         let that = this
-        // this.$set(this.dataToEdit, 'currentitem', this.editdata.records[e.value])
-        // console.log('页面暂存数据为', this.dataToEdit)
         let orderId = this.editdata.records[e.value].id // 取出订单id 去查订单详情
-        // console.log('订单id为', orderId)
         wx.request({ // 获取订单详情
           url: 'http://10.220.98.168:8080/orders/' + orderId + '/my',
           header: {
@@ -284,7 +281,7 @@
                   util.progressTips('Z点站址不存在')
                 }
               } else {
-                url = '../../pages/ordercommitdetailmulti/main'
+                url = '../../pages/ordercommiteddetailmulti/main'
               }
               mpvue.navigateTo({url})
             } else {
@@ -340,7 +337,7 @@
       updateCommit (page) {
         let that = this
         wx.request({ // 获取订单列表
-          url: 'http://10.220.98.168:8080/orders/my?applyStatus=sumbitted&limit=10&offset=' + page + '&order=ASC&sort=openDate&type=maintain',
+          url: 'http://10.220.98.168:8080/orders/my?applyStatus=submitted&limit=10&offset=' + page + '&order=ASC&sort=openDate&type=maintain',
           header: {
             'content-type': 'application/json', // 默认值
             'user_id': '1'

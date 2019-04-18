@@ -9,22 +9,35 @@
       <div class="section" style="display: flex; padding-top: 5px">
         <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点地区</div>
         <picker
-          mode="region"
+          mode="selector"
           @change="bindRegionChange"
-          :value="region"
-          :custom-item="customItem"
+          :value="regionIndex"
+          :range="regionArray"
           style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
         >
-          <div>{{region[0]}}-{{region[1]}}-{{region[2]}}</div>
+          <div>{{regionArray[regionIndex]}}</div>
 
         </picker>
       </div>
-      <i-input  type="text" :value="siteaddress" :maxlength="100"right title="站点详细地址" placeholder="请输入详细地址" @change="siteaddressChange" autofocus />
+      <div class="section" style="display: flex; padding-top: 5px">
+        <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点街道</div>
+        <picker
+          mode="selector"
+          @change="bindStreetChange"
+          :value="streetIndex"
+          :range="streetArray"
+          style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
+        >
+          <div>{{streetArray[streetIndex]}}</div>
+
+        </picker>
+      </div>
+      <i-input  type="text" :value="pointToPoint.pointA.site_DetailAddress" :maxlength="100"right title="站点详细地址" placeholder="请输入详细地址" @change="siteaddressChange" autofocus />
 
       <div>
-        <i-input  type="text" :value="sitename" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" @change="sitenameChange" autofocus />
-        <i-input  type="email" :value="siteemail" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" @change="siteemailChange" autofocus/>
-        <i-input  type="phone" :value="sitephone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" @change="sitephoneChange"  autofocus/>
+        <i-input  type="text" :value="pointToPoint.pointA.site_ContactName" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" @change="sitenameChange" autofocus />
+        <i-input  type="email" :value="pointToPoint.pointA.site_ContactEmail" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" @change="siteemailChange" autofocus/>
+        <i-input  type="phone" :value="pointToPoint.pointA.site_ContactPhone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" @change="sitephoneChange"  autofocus/>
       </div>
 
       <i-button @click="formSubmitA" type="primary" shape="circle" style="padding-bottom: 20px">下一步</i-button>
@@ -34,7 +47,56 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import util from '../../utils/index'
   export default {
+    mounted () {
+      // 这里要请求重庆地区和街道
+      let that = this
+      wx.request({
+        url: 'http://10.220.98.168:8080/districts/500100/children/',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'user_id': '1'
+        },
+        method: 'GET',
+        success (res) {
+          if (res.data.code === 200) {
+            that.regin = res.data.data
+            that.$set(that.pointToPoint.pointA, 'site_region', that.regin[0])
+            that.regin.forEach(function (item) {
+              that.regionArray.push(item.name)
+            })
+          } else {
+            util.progressTips('获取重庆区域失败，请稍后重试')
+          }
+        },
+        fail (res) {
+          console.log(res.data)
+        }
+      })
+      wx.request({ // 初始万州区街道
+        url: 'http://10.220.98.168:8080/districts/500101/children/',
+        header: {
+          'content-type': 'application/json', // 默认值
+          'user_id': '1'
+        },
+        method: 'GET',
+        success (res) {
+          if (res.data.code === 200) {
+            that.street = res.data.data
+            that.$set(that.pointToPoint.pointA, 'site_Street', that.street[0])
+            that.street.forEach(function (item) {
+              that.streetArray.push(item.name)
+            })
+          } else {
+            util.progressTips('获取重庆区域失败，请稍后重试')
+          }
+        },
+        fail (res) {
+          console.log(res.data)
+        }
+      })
+    },
     computed: {
       ...mapGetters({
         pointToPoint: 'exportPointToPoint'
@@ -44,38 +106,53 @@
     },
     data () {
       return {
-        region: ['四川省', '成都市', '高新区'],
-        customItem: '全部',
-        siteaddress: '',
-        sitename: '',
-        siteemail: '',
-        sitephone: ''
+        regionIndex: 0,
+        regin: [],
+        regionArray: [],
+        streetIndex: 0,
+        street: [],
+        streetArray: []
       }
     },
     methods: {
       formSubmitA (e) {
         // A端数据暂存
         console.log(this.pointToPoint)
-        // let tempdata = []
-        // tempdata.push({'region': this.region})
-        // tempdata.push({'siteaddress': this.siteaddress})
-        // tempdata.push({'sitename': this.sitename})
-        // tempdata.push({'siteemail': this.siteemail})
-        // tempdata.push({'sitephone': this.sitephone})
-        // // {
-        // //   'region': this.region,
-        // //   'siteaddress': this.siteaddress,
-        // //   'sitename': this.sitename,
-        // //   'siteemail': this.siteemail,
-        // //   'sitephone': this.sitephone}
-        // mpvue.setStorageSync('storageA', tempdata)
-        //  前往Z端页面
         const url = '../../pages/pointZ/main'
         wx.navigateTo({url})
       },
       bindRegionChange (e) {
-        this.region = e.mp.detail.value
-        this.$set(this.pointToPoint.pointA, 'site_region', this.region)
+        this.regionIndex = e.mp.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_region', this.regin[this.regionIndex])
+        // 区域改变，重新请求街道
+        let that = this
+        wx.request({ // 初始万州区街道
+          url: 'http://10.220.98.168:8080/districts/' + that.regin[that.regionIndex].code + '/children/',
+          header: {
+            'content-type': 'application/json', // 默认值
+            'user_id': '1'
+          },
+          method: 'GET',
+          success (res) {
+            if (res.data.code === 200) {
+              that.street = []
+              that.streetArray = []
+              that.street = res.data.data
+              that.street.forEach(function (item) {
+                that.streetArray.push(item.name)
+              })
+            } else {
+              util.progressTips('获取街道失败，请稍后重试')
+            }
+          },
+          fail (res) {
+            util.progressTips('获取街道失败，请稍后重试')
+          }
+        })
+      },
+      bindStreetChange (e) {
+        this.streetIndex = e.mp.detail.value
+        this.$set(this.pointToPoint.pointA, 'site_Street', this.street[this.streetIndex])
       },
       siteaddressChange (e) {
         this.siteaddress = e.mp.detail.detail.value
