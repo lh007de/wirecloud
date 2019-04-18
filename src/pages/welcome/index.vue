@@ -36,8 +36,13 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   const app = getApp()
   export default {
+    computed: {
+      ...mapGetters({
+        userCentral: 'exportUserCentral'
+      })},
     name: 'index',
     data () {
       return {
@@ -85,6 +90,8 @@
       onGotUserInfo: function (e) {
         console.log('用户授权中得到用户信息', e.mp.detail.userInfo)
         app.globalData.userinfo = e.mp.detail.userInfo
+        this.$set(this.userCentral, 'userinfo', e.mp.detail.userInfo)
+        // console.log(this.userCentral)
         const url = '../../pages/register/main'
         mpvue.navigateTo({url})
       }

@@ -3,11 +3,11 @@
     <div style="width: 100%;height: 200rpx; background-color:#2d8cf0;display: flex">
     <!--个人信息和login展示-->
       <div style="width: 150rpx;height: 150rpx;padding-bottom: 10rpx;display: inline-block;padding-left: 20rpx">
-        <image v-if="userinfo" :src="userinfo.avatarUrl" style="width: 100%;height: 100%"></image>
+        <image v-if="userinfo" :src="userCentral.userinfo.avatarUrl" style="width: 100%;height: 100%"></image>
       </div>
       <div style="width: 500rpx;height: 150rpx;padding-bottom: 10rpx;display: inline-block;padding-left: 20rpx;font-family: PingFang;color: #464c5b;font-size: 14px">
         <div style="height: 50rpx;width: 500rpx">
-          {{userinfo.nickName}}
+          {{userCentral.userinfo.nickName}}
         </div>
 
           <div style="height: 100rpx;width: 500rpx;font-size: 14px;padding-top: -10rpx">
@@ -67,33 +67,8 @@
     },
     mounted () {
       this.userinfo = getApp().globalData.userInfo
-
-      // console.log(this.useinfo)
-      // this.globalData.mydata = {username: ''}
-      // this.username = this.globalData.mydata.username
-      // console.log('使用vuex携带数据', this.userCentral)
     },
     methods: {
-      formSubmitA (e) {
-        // console.log('form发生了submit事件，携带数据为：', e)
-        // A端数据暂存
-        let tempdata = []
-        tempdata.push({'region': this.region})
-        tempdata.push({'siteaddress': this.siteaddress})
-        tempdata.push({'sitename': this.sitename})
-        tempdata.push({'siteemail': this.siteemail})
-        tempdata.push({'sitephone': this.sitephone})
-        // {
-        //   'region': this.region,
-        //   'siteaddress': this.siteaddress,
-        //   'sitename': this.sitename,
-        //   'siteemail': this.siteemail,
-        //   'sitephone': this.sitephone}
-        mpvue.setStorageSync('storageA', tempdata)
-        //  前往Z端页面
-        const url = '../../pages/pointZ/main'
-        mpvue.navigateTo({url})
-      }
     }
 
   }

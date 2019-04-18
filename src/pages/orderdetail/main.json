@@ -5,6 +5,7 @@
   "navigationBarTitleText": "订单详情",
   "backgroundColor": "#b5b5b5",
   "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "i-button": "../../../static/iview/button/index",
     "i-input": "../../../static/iview/input/index",
