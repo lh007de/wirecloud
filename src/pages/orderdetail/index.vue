@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="containner">
     <swiper :indicator-dots="indicatorDots"
             :interval="interval"
             :duration="duration"
-            next-margin="40px"
-            circular="true"
-            style=" padding-top: 10px"
+            next-margin="30px"
+            previous-margin="30px"
+            style=" padding-top: 20px"
             indicator-active-color="#8A2BE2">
       <swiper-item><i-card title="A端" style="width: 80%">
         <view slot="content">
@@ -27,7 +27,8 @@
     </swiper>
 
     <!--基础参数展示-->
-    <div><i-card title="基础参数">
+    <div class="para">
+      <i-card title="基础参数">
       <view slot="content">
         <p>业务类型：云专线</p>
         <p>业务名称：点到点</p>
@@ -36,7 +37,8 @@
         <p>携带划分VLAN：{{globalPara.business_IsVlan ? '是': '否'}}</p>
         <p>订单提交时间：{{order_time}}</p>
       </view>
-    </i-card></div>
+    </i-card>
+    </div>
 
 
     <!--全局参数展示-->
@@ -53,7 +55,7 @@
       </view>
     </i-card></div>
 
-    <i-button @click="formSubmitA" type="primary" shape="circle">提交</i-button>
+    <i-button @click="submit" type="primary" shape="circle">提交</i-button>
   </div>
 </template>
 <script>
@@ -86,8 +88,14 @@
       this.$set(this.globalPara, 'service_end_time', this.service_end_time)
     },
     methods: {
+      submit (e) { // 用来调试样式
+        const url = '../../pages/ordercommiteddetail/main'
+        mpvue.navigateTo({url})
+      },
       formSubmitA (e) {
         // 提交到后台
+        const url = '../../pages/ordercommiteddetail/main'
+        mpvue.navigateTo({url})
         let that = this
         // 这里区分是创建提交还是草稿提交
         if (this.globalPara.orderId) {
@@ -271,18 +279,12 @@
 </script>
 
 <style>
-  .showbasePara {
-    border-radius: 5px;
-    border: lightgrey;
-    border-style: solid;
-    border-width: 1px;
-    font-size: 14px;
-    font-family: "PingFang SC","Helvetica Neue", Helvetica,  "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-    color: #657180;
-    height: 420px;
-    width: 90%;
-    align-items: center;
-    padding-left: 15px;
-    padding-top: 15px;
+  .containner{
+    background-color: #f8f8f9 ;
+    color: #464c5b;
+    font-family: PingFang;
+    font-size: 28rpx;
+    width: 750rpx;
   }
+
 </style>

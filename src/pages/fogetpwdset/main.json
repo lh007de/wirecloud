@@ -1,7 +1,7 @@
 {
   "component": true,
   "navigationBarBackgroundColor": "#2d8cf0",
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "navigationBarTitleText": "设置登录密码",
   "backgroundColor": "#b5b5b5",
   "backgroundTextStyle": "dark",

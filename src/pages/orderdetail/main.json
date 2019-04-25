@@ -1,9 +1,9 @@
 {
   "component": true,
   "navigationBarBackgroundColor": "#2d8cf0",
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "navigationBarTitleText": "订单详情",
-  "backgroundColor": "#b5b5b5",
+  "backgroundColor": "#f8f8f9",
   "backgroundTextStyle": "dark",
   "enablePullDownRefresh": true,
   "usingComponents": {

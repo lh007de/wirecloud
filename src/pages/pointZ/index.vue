@@ -1,48 +1,47 @@
 <template>
-  <div>
-    <form :class="container" @submit="formSubmitA">
-      <div style="display: flex; padding-top: 8px">
-        <label style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family: PingFang;color: #464c5b">业务类型：云专线</label>
-        <label style=" width:50%;display:inline-block;font-size:14px;padding-right:15px;font-family:PingFang;color: #464c5b;text-align: right">业务名称：点到点</label>
-      </div>
+  <div class="containner">
+    <div class="title">
+      <label  class="text" >业务类型：云专线</label>
+      <label  class="text" >业务名称：点到点</label>
+    </div>
 
-      <div class="section" style="display: flex; padding-top: 5px">
-        <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点地区</div>
-        <picker
-          mode="selector"
-          @change="bindRegionChange"
-          :value="regionIndex"
-          :range="regionArray"
-          style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
-        >
-          <div>{{regionArray[regionIndex]}}</div>
+    <div class="section">
+      <label class="label">站点地区</label>
+      <picker
+        mode="selector"
+        @change="bindRegionChange"
+        :value="regionIndex"
+        :range="regionArray"
+        class="picker"
+      >
+        <div>{{regionArray[regionIndex]}}</div>
+      </picker>
+      <div class="divide"></div>
+      <label class="label">站点街道</label>
+      <picker
+        mode="selector"
+        @change="bindStreetChange"
+        :value="streetIndex"
+        :range="streetArray"
+        class="picker"
+      >
+        <div>{{streetArray[streetIndex]}}</div>
 
-        </picker>
-      </div>
-      <div class="section" style="display: flex; padding-top: 5px">
-        <div class="section__title" style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family:PingFang;color: #464c5b">站点街道</div>
-        <picker
-          mode="selector"
-          @change="bindStreetChange"
-          :value="streetIndex"
-          :range="streetArray"
-          style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family:PingFang;color: #657180;text-align: right"
-        >
-          <div>{{streetArray[streetIndex]}}</div>
-
-        </picker>
-      </div>
+      </picker>
+      <div class="divide"></div>
       <i-input  type="text" :value="pointToPoint.pointZ.site_DetailAddress" :maxlength="100"right title="站点详细地址" placeholder="请输入详细地址" @change="siteaddressChange" autofocus />
+    </div>
 
-      <div>
-        <i-input  type="text" :value="pointToPoint.pointZ.site_ContactName" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" @change="sitenameChange" autofocus />
-        <i-input  type="email" :value="pointToPoint.pointZ.site_ContactEmail" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" @change="siteemailChange" autofocus/>
-        <i-input  type="phone" :value="pointToPoint.pointZ.site_ContactPhone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" @change="sitephoneChange" autofocus/>
-      </div>
 
-      <i-button @click="formSubmitA" type="primary" shape="circle" style="padding-bottom: 20px">下一步</i-button>
-
-    </form>
+    <div class="contact">
+      <i-input type="text" :value="pointToPoint.pointZ.site_ContactName" :maxlength="10"right title="站点联系人姓名" placeholder="请输入姓名" @change="sitenameChange" autofocus />
+      <div class="divide"></div>
+      <i-input type="email" :value="pointToPoint.pointZ.site_ContactEmail" :maxlength="50" right title="站点联系人邮箱" placeholder="请输入邮箱" @change="siteemailChange" autofocus/>
+      <div class="divide"></div>
+      <i-input type="phone" :value="pointToPoint.pointZ.site_ContactPhone" :maxlength="50"right title="站点联系人电话" placeholder="请输入电话" @change="sitephoneChange"  autofocus/>
+    </div>
+    <div class="line-divide"></div>
+    <i-button @click="formSubmitA" type="primary" shape="circle">下一步</i-button>
   </div>
 </template>
 <script>
@@ -172,4 +171,50 @@
 </script>
 
 <style>
+  .containner{
+    background-color: #f8f8f9 ;
+    color: #464c5b;
+    font-family: PingFang;
+    font-size: 28rpx;
+    width: 750rpx;
+    height: 1334rpx;
+  }
+  .title{
+    height: 80rpx;
+    background-color: white;
+    display: flex;
+    align-items: center;
+  }
+  .text{
+    padding-left: 15px;
+    float: left;
+  }
+  .section{
+    background-color:  #f8f8f9;
+    margin-top: 30rpx;
+    background-color: white;
+    line-height: 80rpx;
+  }
+  .label{
+    float:left;
+    padding-left: 30rpx;
+  }
+  .picker{
+    float:right;
+    padding-right: 30rpx;
+  }
+  .contact{
+    margin-top: 30rpx;
+  }
+  .divide{
+    clear: both;
+    width: 690rpx;
+    height: 1rpx;
+    border-bottom: 1rpx solid #e9eaec;
+    margin-left: 30rpx;
+  }
+  .line-divide{
+    height: 80rpx;
+    background-color: #f8f8f9;
+  }
 </style>

@@ -1,9 +1,9 @@
 {
   "component": true,
   "navigationBarBackgroundColor": "#2d8cf0",
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "navigationBarTitleText": "创建订单",
-  "backgroundColor": "#b5b5b5",
+  "backgroundColor": "#d5d5d6",
   "backgroundTextStyle": "dark",
     "usingComponents": {
       "i-button": "../../../static/iview/button/index",

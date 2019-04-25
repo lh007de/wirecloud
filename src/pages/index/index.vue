@@ -1,71 +1,67 @@
 <template>
-  <div>
-    <form @submit="formSubmit">
-        <label style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family: PingFang;color: #464c5b">业务类型：云专线</label>
+  <div class="containner">
+      <div class="text">
+      <label >业务类型：云专线</label>
+    </div>
 
-      <div>
-        <i-input  type="text" :value="globalPara.business_name" :maxlength="10"right title="业务联系人姓名" placeholder="请输入姓名" @change="changeName" autofocus />
-        <i-input  type="number" :value="globalPara.business_phone" :maxlength="11" right title="业务联系人电话" placeholder="请输入电话" @change="changePhone" autofocus/>
-        <i-input  type="email" :value="globalPara.business_email" :maxlength="50"right title="业务联系人邮箱" placeholder="请输入邮箱" @change="changeEmail" autofocus/>
+      <div class="business">
+        <i-input  i-class="item" type="text" :value="globalPara.business_name" :maxlength="10"right title="业务联系人姓名" placeholder="请输入姓名" @change="changeName" autofocus />
+        <i-input  i-class="item" type="number" :value="globalPara.business_phone" :maxlength="11" right title="业务联系人电话" placeholder="请输入电话" @change="changePhone" autofocus/>
+        <i-input  i-class="item" type="email" :value="globalPara.business_email" :maxlength="50"right title="业务联系人邮箱" placeholder="请输入邮箱" @change="changeEmail" autofocus/>
       </div>
 
-      <div>
-        <i-input  type="text" :value="globalPara.business_managerID" :maxlength="50"right title="客户经理ID" placeholder="请输入客户经理ID" @change="changeManager" autofocus/>
+      <div class="manager">
+        <i-input  type="text" :value="globalPara.business_managerID" :maxlength="50"right title="客户经理ID(非必填)" placeholder="请输入客户经理ID" @change="changeManager" autofocus/>
       </div>
       <!--业务开通相关信息-->
-      <div>
-        <div style="display: flex">
-          <label style=" width: 50%; display: inline-block; font-size: 14px;padding-left: 15px;font-family: PingFang;color: #464c5b">业务预计开通周期</label>
-          <!--<p style="width: 80%; border:1px solid green; font-size: 12px" align="right">预计业务结束时间{{currenttime}}</p>-->
-          <picker @change="PickerChange" style=" width: 50%; display: inline-block; font-size: 14px;padding-right: 15px;font-family: PingFang;color: #464c5b;text-align: right" :value="true" :range="array">
+      <div class="service">
+
+        <label class="label" >业务预计开通周期</label>
+        <picker @change="PickerChange" class="picker" :value="true" :range="array">
             请选择：{{array[index]}}
-          </picker>
+        </picker>
+        <i-cell title="是否自动续费" i-class="cell">
+          <i-switch  :value="globalPara.business_IsRenew" @change="switch1Change" slot="footer"></i-switch>
+        </i-cell>
+        <div class="paymethod">
+          <label class="label">业务服务缴费周期</label>
+
+          <i-radio-group :current="globalPara.business_PaidCycle" @change="handletimeChange">
+            <i-radio    value="按年" style="float: right" ></i-radio>
+            <i-radio    value="按月"  style="float: right"></i-radio>
+          </i-radio-group>
         </div>
-          <i-cell title="是否自动续费" >
-            <i-switch  :value="globalPara.business_IsRenew" @change="switch1Change" slot="footer"></i-switch>
-          </i-cell>
-        <div>
-          <!--是否自动续费-->
-          <!--<switch :checked="isRenew" name="switch" @change="switch1Change" />-->
-            <i-panel title="业务服务缴费周期">
-              <i-radio-group :current="globalPara.business_PaidCycle" @change="handletimeChange">
-                <i-radio  position="left"  value="按年" style=" width: 50%; display: inline-block;justify-content: center"></i-radio>
-                <i-radio  position="left"  value="按月" style=" width: 50%; display: inline-block;justify-content: center"></i-radio>
-              </i-radio-group>
-            </i-panel>
-          </div>
 
-          <div>
+      </div>
+      <div style="clear: both">
+      </div>
+      <div class="para">
+        <div class="paymethod">
+          <label class="label" style="width: 200rpx">业务名称</label>
+          <i-radio-group :current="globalPara.business_type" @change="handleServiceChange">
+            <span style="float: right">
+            <i-radio  position="left"  value="点到多点"></i-radio>
+          </span>
+            <span style=" float: right">
+            <i-radio  position="left"  value="点到点"></i-radio>
+          </span>
+          </i-radio-group>
+        </div>
 
-            <i-panel title="业务名称">
-              <i-radio-group :current="globalPara.business_type" @change="handleServiceChange">
-                <span style=" width: 50%; display: inline-block">
-                  <i-radio  position="left"  value="点到点"></i-radio>
-                </span>
-                <span style=" width: 50%; display: inline-block;align-items: right">
-                  <i-radio  position="left"  value="点到多点"></i-radio>
-                </span>
-              </i-radio-group>
-            </i-panel>
+      <!--点到点选择，点到多点选择-->
+      <div v-if="globalPara.business_type === '点到点'">
+        <i-input  type="num" :value="globalPara.business_band" :maxlength="10" right title="服务固定带宽(M)" placeholder="请输入" @change="changeBand" autofocus />
+        <i-cell title="携带划分VLAN" i-class="cell">
+          <i-switch  :value="globalPara.business_IsVlan" @change="divideBandChange" slot="footer"></i-switch>
+        </i-cell>
 
-
-          <!--点到点选择，点到多点选择-->
-          <div v-if="globalPara.business_type === '点到点'">
-            <i-input  type="num" :value="globalPara.business_band" :maxlength="10" right title="服务宽带(M)" placeholder="请输入" @change="changeBand" autofocus />
-            <i-cell title="携带划分VLAN" >
-              <i-switch  :value="globalPara.business_IsVlan" @change="divideBandChange" slot="footer"></i-switch>
-            </i-cell>
-
-            <div v-if="globalPara.business_IsVlan">
-              <i-input  type="text" :value="globalPara.business_VlanId" :maxlength="30" right title="VLAN ID" placeholder="请输入" @change="changeVlanID" autofocus />
-            </div>
-          </div>
-
+        <div v-if="globalPara.business_IsVlan">
+          <i-input  type="text" :value="globalPara.business_VlanId" :maxlength="30" right title="VLAN ID" placeholder="请输入" @change="changeVlanID" autofocus />
         </div>
       </div>
-
+      </div>
+      <div class="divide"></div>
       <i-button @click="formSubmit" type="primary" shape="circle">下一步</i-button>
-    </form>
   </div>
 </template>
 <script>
@@ -152,17 +148,76 @@
 </script>
 
 <style>
-  .div_block {
-    width: 250pt;
-    height: 26.7pt;
+  .containner{
+    background-color: #f8f8f9;
   }
-  .content{
-    font-size: 9.3pt;
-    padding-left: 5pt;
-    padding-bottom: 5pt;
+  .text {
+    background-color: white;
+    font-size: 14px;
+    width: 750rpx;
+    height: 80rpx;
+    display: flex;
+    align-items:Center;
+    padding-left: 15px;
+    font-family: PingFang-SC-Regular;
+    color: #464c5b
   }
-  .business_name
-  {
-    width: 60%;
+  .business{
+    margin-top: 30rpx;
+  }
+  .item{
+    border-bottom: 1rpx solid #e9eaec;
+  }
+  .manager{
+    margin-top: 30rpx;
+    height: 80rpx;
+    align-items:Center;
+  }
+  .service{
+    margin-top: 50rpx;
+    background-color: white;
+    border-bottom: 1rpx solid #e9eaec  ;
+  }
+  .label{
+    font-size: 14px;
+    width: 300rpx;
+    padding-left: 15px;
+    font-family: PingFang;
+    color: #464c5b;
+    float: left;
+    line-height: 80rpx;
+    background-color: white;
+    align-items: center;
+  }
+  .picker{
+    font-size: 14px;
+    padding-right: 15px;
+    font-family: PingFang;
+    color: #464c5b;
+    float: right;
+    line-height: 80rpx;
+  }
+  .cell{
+    line-height: 80rpx;
+    clear: left;
+    color: #464c5b;
+    border-bottom: 1rpx solid #e9eaec;
+    border-top: 1rpx solid #e9eaec;
+  }
+  .panel{
+    hide-border: true;
+  }
+  .paymethod{
+   background-color: white;
+   height: 100rpx;
+   align-items: center;
+   border-bottom: 1rpx solid #e9eaec;
+ }
+  .para{
+    margin-top: 30rpx;
+  }
+  .divide{
+    height: 60rpx;
+    border: 0px transparent;
   }
 </style>

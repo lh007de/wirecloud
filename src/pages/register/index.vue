@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="containner">
     <div class="section">
         <div class="section-item">
           <div class="section-tips">
@@ -25,6 +25,7 @@
     <i-button  @click="register" type="primary"  shape="circle">注册</i-button>
   </div>
 </template>
+
 <script>
   import {mapGetters} from 'vuex'
   import util from '../../utils/index'
@@ -100,15 +101,19 @@
 </script>
 
 <style>
-
-  .section {
-    margin-top: 20rpx;
+  .containner{
+    border:1px solid transparent;
+    width: 375px;
+    height: 1334rpx;
+    background-color: #f8f8f9;
   }
-
-  .section-item {
+  .section {
+    margin-top: 20px;
     background-color: #ffffff;
+  }
+  .section-item {
     overflow: hidden;
-    border-bottom: 1rpx solid lightgray;
+    border-bottom: 1rpx solid #e9eaec;
   }
 
   .section-tips {
@@ -161,8 +166,7 @@
   .section-code text{
     font-size: 12px;
     line-height:  120rpx;
-    color: #e05b56;
-    border-bottom: 1rpx solid #e05b56;
+    color: #2979ff;
   }
   .divide{
     height: 70rpx;

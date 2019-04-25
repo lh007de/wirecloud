@@ -1,10 +1,10 @@
 {
   "component": true,
   "navigationBarBackgroundColor": "#2d8cf0",
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "navigationBarTitleText": "快速注册",
-  "backgroundColor": "#f5f5f6",
-  "backgroundTextStyle": "light",
+  "backgroundColor": "#f8f8f9",
+  "backgroundTextStyle": "dark",
   "usingComponents": {
     "i-button": "../../../static/iview/button/index",
     "i-input": "../../../static/iview/input/index",

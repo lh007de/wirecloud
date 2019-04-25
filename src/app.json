@@ -35,8 +35,8 @@
     "pages/ordercommiteddetailmulti/main"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#2d8cf0",
     "navigationBarTitleText": "重庆云专线",
     "navigationBarTextStyle": "white"
   },
@@ -45,20 +45,20 @@
       {
         "pagePath": "pages/index/main",
         "text": "创建订单",
-        "iconPath": "static/tabs/home.png",
-        "selectedIconPath": "static/tabs/home-active.png"
+        "iconPath": "static/tabs/chuangjiandingdan_2.png",
+        "selectedIconPath": "static/tabs/chuangjiandingdan_1.png"
       },
       {
         "pagePath": "pages/ordermanage/main",
         "text": "订单管理",
-        "iconPath": "static/tabs/orders.png",
-        "selectedIconPath": "static/tabs/orders-active.png"
+        "iconPath": "static/tabs/dingdanguanli_2.png",
+        "selectedIconPath": "static/tabs/dingdanguanli_1.png"
       },
       {
         "pagePath": "pages/usercentral/main",
         "text": "个人中心",
-        "iconPath": "static/tabs/home.png",
-        "selectedIconPath": "static/tabs/home.png"
+        "iconPath": "static/tabs/gerenzhongxin_2.png",
+        "selectedIconPath": "static/tabs/gerenzhongxin_1.png"
       }
     ]
   }

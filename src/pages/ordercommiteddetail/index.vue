@@ -2,9 +2,8 @@
   <div>
     <div class="mybox">
       <div class="loginpic">
-        <img src="../../../static/images/sharepic.png" style="width: 100%;height: 100%"/>
+        <img src="../../../static/images/companylogo.png" style="width: 100%;height: 100%"/>
       </div>
-
       <div>
       <div style="text-align: center">重庆云专线系统平台</div>
         <div class="showcopy">
@@ -24,9 +23,10 @@
         <swiper :indicator-dots="indicatorDots"
                 :interval="interval"
                 :duration="duration"
-                next-margin="40px"
+                next-margin="30px"
+                previous-margin="30px"
                 circular="true"
-                style=" padding-top: 10px"
+                style=" padding-top: 20px"
                 indicator-active-color="#8A2BE2">
           <swiper-item><i-card title="A端" style="width: 80%">
             <view slot="content">

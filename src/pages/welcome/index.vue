@@ -1,6 +1,6 @@
 <template>
 
-<div>
+<div class="containner">
   <div class="userinfo">
     <img src="/static/images/wirelogin.png" style="height: 100%; width: 100%;vertical-align: middle;" background-size="cover" />
   </div>
@@ -13,24 +13,15 @@
 
   <div class="reminder">
     <span>授权后开发者将获取以下权限</span>
-    <ul>
-      <li type="circle">获得你的公开信息(昵称，头像等)</li>
-    </ul>
+      <ul>
+        <li>获得你的公开信息(昵称，头像等)</li>
+      </ul>
   </div>
   <div class="divide"></div>
   <div >
     <i-button open-type="getUserInfo" type="primary"  shape="circle" lang="zh_CN" @getuserinfo="onGotUserInfo">去授权</i-button>
   </div>
 
-  <!--弹出注册框样式-->
-  <!--<div>-->
-    <!--<modal id="modal" :hidden="hiddenmodalput" title="请注册" confirm-text="提交" cancel-text="取消"  @cancel="cancel" @confirm="confirm">-->
-      <!--<label>手机号</label>-->
-      <!--<input type='text' placeholder="手机号：" @input="input" auto-focus />-->
-      <!--<label>验证码</label>-->
-      <!--<input type='number' placeholder="验证码：" auto-focus/>-->
-    <!--</modal>-->
-  <!--</div>-->
 
 </div>
 </template>
@@ -100,7 +91,11 @@
 </script>
 
 <style>
-
+  .containner{
+    background-color: #f8f8f9;
+    width: 750rpx;
+    height: 1334rpx;
+  }
   .userinfo{
     width: 200rpx;
     height: 160rpx;
@@ -111,7 +106,6 @@
   .spantitle{
     font-family: PingFang-SC-Medium;
     font-size: 36rpx;
-    font-weight: bold;
     text-align: center;
     padding-top: 50rpx;
     padding-bottom: 70rpx;
@@ -127,7 +121,7 @@
   .line span{
     position: relative;
     top: -20px;
-    background: #fff;
+    background: #dddddd;
   }
   .reminder{
     padding-top: 20rpx;
@@ -142,9 +136,6 @@
   .reminder li{
     font-size: 22rpx;
     font-weight: lighter;
-  }
-  .i-button{
-    font-size: 50rpx;
   }
   .divide{
     width: 100%;
